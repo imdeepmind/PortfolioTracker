@@ -32,19 +32,8 @@ export default function HoldingCard({
 
   return (
     <GlassCard padding="md" className="hover:bg-white/[0.06] transition-all duration-200 group flex flex-col">
-      {/* Top row: name + action buttons */}
-      <div className="flex items-start justify-between gap-3 mb-3">
-        <div className="min-w-0 flex-1">
-          <Link href={`/holdings/${id}/transactions`}>
-            <h3 className="text-white font-semibold text-lg truncate hover:text-indigo-300 transition-colors cursor-pointer">
-              {name}
-            </h3>
-          </Link>
-          {description && (
-            <p className="text-gray-500 text-xs mt-1 line-clamp-1">{description}</p>
-          )}
-        </div>
-
+      {/* Top row: action buttons */}
+      <div className="flex items-center justify-end">
         <div className="flex items-center gap-1 shrink-0">
           <Link
             href={`/holdings/${id}/transactions`}
@@ -75,6 +64,21 @@ export default function HoldingCard({
           </button>
         </div>
       </div>
+
+      {/* Name and description */}
+      <div className="flex items-center gap-1 shrink-0 mb-3">
+        <div className="min-w-0 flex-1">
+          <Link href={`/holdings/${id}/transactions`}>
+            <h3 className="text-white font-semibold text-lg truncate hover:text-indigo-300 transition-colors cursor-pointer">
+              {name}
+            </h3>
+          </Link>
+          {description && (
+            <p className="text-gray-500 text-xs mt-1 line-clamp-1">{description}</p>
+          )}
+        </div>
+
+      </div> 
 
       {/* Financial stats */}
       <div className="border-t border-white/[0.06] pt-3 mt-auto">

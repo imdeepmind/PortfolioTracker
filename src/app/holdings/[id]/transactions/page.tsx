@@ -98,11 +98,8 @@ export default function TransactionsPage({
       <BackLink href="/holdings">Back to Holdings</BackLink>
 
       <PageHeader
-        title="Transactions"
-        titleSuffix={
-          holding && <span className="text-indigo-400">— {holding.name}</span>
-        }
-        subtitle="Track investment history over time"
+        title={holding?.name ?? "Transactions"}
+        subtitle={`Track ${holding?.name ?? ""} investments history over time`}
         action={
           <Button href={`/holdings/${holdingId}/transactions/new`} icon={PlusIcon}>
             New Transaction

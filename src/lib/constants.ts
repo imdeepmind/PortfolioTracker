@@ -1,7 +1,7 @@
 export const CURRENCY = {
-  code: "USD",
-  symbol: "$",
-  locale: "en-US",
+  code: "INR",
+  symbol: "₹",
+  locale: "en-IN",
 };
 
 export const formatCurrency = (amount: number): string =>
