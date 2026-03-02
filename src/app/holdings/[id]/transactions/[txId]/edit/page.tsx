@@ -2,9 +2,13 @@
 
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import toast from "react-hot-toast";
-import DashboardLayout from "@/components/DashboardLayout";
+import DashboardLayout from "@/components/items/DashboardLayout";
+import GlassCard from "@/components/bits/GlassCard";
+import Input from "@/components/bits/Input";
+import Button from "@/components/bits/Button";
+import BackLink from "@/components/bits/BackLink";
+import { PageSpinner } from "@/components/bits/Spinner";
 
 export default function EditTransactionPage({
   params,
@@ -77,15 +81,7 @@ export default function EditTransactionPage({
   if (fetching) {
     return (
       <DashboardLayout>
-        <div className="flex items-center justify-center py-20">
-          <div className="flex items-center gap-3 text-gray-400">
-            <svg className="animate-spin w-6 h-6" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-            </svg>
-            Loading transaction...
-          </div>
-        </div>
+        <PageSpinner text="Loading transaction..." />
       </DashboardLayout>
     );
   }
@@ -93,102 +89,56 @@ export default function EditTransactionPage({
   return (
     <DashboardLayout>
       <div className="max-w-2xl mx-auto">
-        {/* Header */}
         <div className="mb-8">
-          <Link
-            href={`/holdings/${holdingId}/transactions`}
-            className="inline-flex items-center gap-1 text-gray-400 hover:text-white transition-colors text-sm mb-4"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Back to Transactions
-          </Link>
+          <BackLink href={`/holdings/${holdingId}/transactions`}>Back to Transactions</BackLink>
           <h1 className="text-3xl font-bold text-white">Edit Transaction</h1>
           <p className="text-gray-400 mt-1">Update transaction details</p>
         </div>
 
-        {/* Form */}
-        <div className="backdrop-blur-xl bg-white/[0.04] border border-white/[0.08] rounded-2xl p-8">
+        <GlassCard>
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label htmlFor="amount" className="block text-sm font-medium text-gray-300 mb-2">
-                Amount Investing <span className="text-red-400">*</span>
-              </label>
-              <p className="text-xs text-gray-500 mb-2">
-                How much was invested in this transaction?
-              </p>
-              <input
-                id="amount"
-                type="number"
-                step="0.01"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-white/[0.06] border border-white/[0.1] text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-200"
-                placeholder="0.00"
-                required
-              />
-            </div>
+            <Input
+              id="amount"
+              label="Amount Investing"
+              helperText="How much was invested in this transaction?"
+              type="number"
+              step="0.01"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="0.00"
+              required
+            />
 
-            <div>
-              <label htmlFor="totalPortfolioSize" className="block text-sm font-medium text-gray-300 mb-2">
-                Total Portfolio Value <span className="text-red-400">*</span>
-              </label>
-              <p className="text-xs text-gray-500 mb-2">
-                Total value of this holding (total invested + capital gains received)
-              </p>
-              <input
-                id="totalPortfolioSize"
-                type="number"
-                step="0.01"
-                value={totalPortfolioSize}
-                onChange={(e) => setTotalPortfolioSize(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-white/[0.06] border border-white/[0.1] text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-200"
-                placeholder="0.00"
-                required
-              />
-            </div>
+            <Input
+              id="totalPortfolioSize"
+              label="Total Portfolio Value"
+              helperText="Total value of this holding (total invested + capital gains received)"
+              type="number"
+              step="0.01"
+              value={totalPortfolioSize}
+              onChange={(e) => setTotalPortfolioSize(e.target.value)}
+              placeholder="0.00"
+              required
+            />
 
-            <div>
-              <label htmlFor="dateTime" className="block text-sm font-medium text-gray-300 mb-2">
-                Date &amp; Time
-              </label>
-              <input
-                id="dateTime"
-                type="datetime-local"
-                value={dateTime}
-                onChange={(e) => setDateTime(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-white/[0.06] border border-white/[0.1] text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-200"
-              />
-            </div>
+            <Input
+              id="dateTime"
+              label="Date & Time"
+              type="datetime-local"
+              value={dateTime}
+              onChange={(e) => setDateTime(e.target.value)}
+            />
 
             <div className="flex items-center gap-3 pt-2">
-              <button
-                type="submit"
-                disabled={loading}
-                className="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 cursor-pointer"
-              >
-                {loading ? (
-                  <span className="flex items-center gap-2">
-                    <svg className="animate-spin w-5 h-5" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                    </svg>
-                    Saving...
-                  </span>
-                ) : (
-                  "Save Changes"
-                )}
-              </button>
-              <Link
-                href={`/holdings/${holdingId}/transactions`}
-                className="px-6 py-3 rounded-xl bg-white/[0.06] border border-white/[0.1] text-gray-300 hover:text-white hover:bg-white/[0.1] transition-all duration-200 font-medium"
-              >
+              <Button type="submit" loading={loading} loadingText="Saving..." size="lg">
+                Save Changes
+              </Button>
+              <Button href={`/holdings/${holdingId}/transactions`} variant="secondary" size="lg">
                 Cancel
-              </Link>
+              </Button>
             </div>
           </form>
-        </div>
+        </GlassCard>
       </div>
     </DashboardLayout>
   );
