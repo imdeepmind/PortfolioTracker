@@ -3,8 +3,10 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import dbConnect from "@/lib/mongodb";
 import Holding from "@/models/Holding";
+import "@/models/Transaction";
+import mongoose from "mongoose";
 
-// GET all holdings for the current user
+// GET all holdings for the current user with latest transaction data
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
@@ -12,11 +14,54 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const userId = (session.user as { id: string }).id;
+
     await dbConnect();
 
-    const holdings = await Holding.find({
-      user: (session.user as { id: string }).id,
-    }).sort({ createdAt: -1 });
+    const holdings = await Holding.aggregate([
+      { $match: { user: new mongoose.Types.ObjectId(userId) } },
+      { $sort: { createdAt: -1 } },
+      {
+        $lookup: {
+          from: "transactions",
+          let: { holdingId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: { $eq: ["$holding", "$$holdingId"] },
+              },
+            },
+            { $sort: { dateTime: -1 } },
+            { $limit: 1 },
+            {
+              $project: {
+                totalAmountInvested: 1,
+                totalPortfolioSize: 1,
+              },
+            },
+          ],
+          as: "latestTransaction",
+        },
+      },
+      {
+        $addFields: {
+          latestTx: { $arrayElemAt: ["$latestTransaction", 0] },
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          description: 1,
+          createdAt: 1,
+          totalAmountInvested: {
+            $ifNull: ["$latestTx.totalAmountInvested", 0],
+          },
+          totalPortfolioSize: {
+            $ifNull: ["$latestTx.totalPortfolioSize", 0],
+          },
+        },
+      },
+    ]);
 
     return NextResponse.json(holdings);
   } catch (error) {

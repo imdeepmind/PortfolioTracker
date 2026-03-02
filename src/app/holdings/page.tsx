@@ -15,6 +15,8 @@ interface Holding {
   name: string;
   description: string;
   createdAt: string;
+  totalAmountInvested: number;
+  totalPortfolioSize: number;
 }
 
 const PlusIcon = (
@@ -101,6 +103,8 @@ export default function HoldingsListPage() {
               name={holding.name}
               description={holding.description}
               createdAt={holding.createdAt}
+              totalAmountInvested={holding.totalAmountInvested}
+              totalPortfolioSize={holding.totalPortfolioSize}
               onDelete={() => setDeleteTarget({ id: holding._id, name: holding.name })}
             />
           ))}
