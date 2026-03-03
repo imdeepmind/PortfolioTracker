@@ -19,109 +19,135 @@ export async function GET() {
     await dbConnect();
 
     const now = new Date();
-    const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-    const sixMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 6, 1);
     const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    const sixMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 6, 1);
     const sixMonthsAgoKey = `${sixMonthsAgo.getFullYear()}-${String(sixMonthsAgo.getMonth() + 1).padStart(2, "0")}`;
 
-    // --- Query 1: Latest transaction per holding (current snapshot) ---
-    const latestPerHolding = await Transaction.aggregate([
+    // --- Single Aggregation Pipeline ---
+    // 1. Group by month and holding to get the last snapshot of each holding per month
+    // 2. Lookup holding details
+    // 3. Group by month to gather all holding snapshots for that month
+    const aggregatedData = await Transaction.aggregate([
       { $match: { user: userId } },
-      { $addFields: { dateTimeParsed: { $toDate: "$dateTime" } } },
-      { $sort: { dateTimeParsed: -1 as const } },
-      {
-        $group: {
-          _id: "$holding",
-          totalAmountInvested: { $first: "$totalAmountInvested" },
-          totalPortfolioSize: { $first: "$totalPortfolioSize" },
-        },
-      },
-    ]);
-
-    const totalAmountInvested = latestPerHolding.reduce(
-      (sum, h) => sum + (h.totalAmountInvested || 0),
-      0
-    );
-    const totalPortfolioSize = latestPerHolding.reduce(
-      (sum, h) => sum + (h.totalPortfolioSize || 0),
-      0
-    );
-    const totalProfit = totalPortfolioSize - totalAmountInvested;
-
-    // --- Query 2: Monthly data — per month aggregate totals ---
-    // For each month, get the latest snapshot per holding and sum of amounts
-    const monthlyData: {
-      _id: string;
-      totalProfit: number;
-      totalInvestment: number;
-    }[] = await Transaction.aggregate([
-      { $match: { user: userId } },
-      { $addFields: { dateTimeParsed: { $toDate: "$dateTime" } } },
-      { $sort: { dateTimeParsed: 1 as const } },
+      { $sort: { dateTime: 1 } },
       {
         $group: {
           _id: {
-            holding: "$holding",
-            month: {
-              $dateToString: { format: "%Y-%m", date: "$dateTimeParsed" },
-            },
+            month: { $dateToString: { format: "%Y-%m", date: { $toDate: "$dateTime" } } },
+            holding: "$holding"
           },
           lastPortfolio: { $last: "$totalPortfolioSize" },
           lastInvested: { $last: "$totalAmountInvested" },
-          monthlyAmount: { $sum: "$amount" },
-        },
+          monthlyAmount: { $sum: "$amount" }
+        }
       },
+      {
+        $lookup: {
+          from: "holdings",
+          localField: "_id.holding",
+          foreignField: "_id",
+          as: "holdingDetails"
+        }
+      },
+      { $unwind: "$holdingDetails" },
       {
         $group: {
           _id: "$_id.month",
-          totalProfit: {
-            $sum: { $subtract: ["$lastPortfolio", "$lastInvested"] },
+          holdings: {
+            $push: {
+              holdingId: "$_id.holding",
+              name: "$holdingDetails.name",
+              risk: { $ifNull: ["$holdingDetails.risk", "high"] },
+              portfolioSize: "$lastPortfolio",
+              amountInvested: "$lastInvested",
+              monthlyInvestment: "$monthlyAmount",
+              profit: { $subtract: ["$lastPortfolio", "$lastInvested"] }
+            }
           },
-          totalInvestment: { $sum: "$monthlyAmount" },
-        },
+          totalMonthlyInvestment: { $sum: "$monthlyAmount" }
+        }
       },
-      { $sort: { _id: 1 as const } },
+      { $sort: { _id: 1 as const } }
     ]);
 
-    // --- Derive metrics from the two queries ---
+    // --- Post-processing for accurate carry-over and overall totals ---
+    const monthlyStats: any[] = [];
+    const latestStates: Record<string, { portfolioSize: number, amountInvested: number, name: string, risk: string }> = {};
+
+    for (const monthData of aggregatedData) {
+      const monthKey = monthData._id;
+      
+      // Update latest states for holdings that had transactions this month
+      monthData.holdings.forEach((h: any) => {
+        latestStates[h.holdingId.toString()] = {
+          name: h.name,
+          risk: h.risk,
+          portfolioSize: h.portfolioSize,
+          amountInvested: h.amountInvested
+        };
+      });
+
+      // Calculate overall cumulative totals at the end of this month
+      let totalPortfolioSize = 0;
+      let totalAmountInvested = 0;
+      const allHoldingsSnapshot: any[] = [];
+
+      Object.entries(latestStates).forEach(([id, state]) => {
+        totalPortfolioSize += state.portfolioSize;
+        totalAmountInvested += state.amountInvested;
+        allHoldingsSnapshot.push({
+          holdingId: id,
+          ...state,
+          profit: state.portfolioSize - state.amountInvested
+        });
+      });
+
+      monthlyStats.push({
+        month: monthKey,
+        totalPortfolioSize,
+        totalAmountInvested,
+        totalProfit: totalPortfolioSize - totalAmountInvested,
+        totalMonthlyInvestment: monthData.totalMonthlyInvestment,
+        holdings: allHoldingsSnapshot
+      });
+    }
+
+    // --- Derive dashboard overall statistics ---
+    const lastMonth = monthlyStats[monthlyStats.length - 1] || { 
+      totalAmountInvested: 0, 
+      totalPortfolioSize: 0, 
+      totalProfit: 0 
+    };
+
+    const totalAmountInvested = lastMonth.totalAmountInvested;
+    const totalPortfolioSize = lastMonth.totalPortfolioSize;
+    const totalProfit = totalPortfolioSize - totalAmountInvested;
 
     // Current month investment
-    const currentMonthEntry = monthlyData.find(
-      (m) => m._id === currentMonthKey
-    );
-    const totalInvestmentCurrentMonth =
-      currentMonthEntry?.totalInvestment || 0;
+    const currentMonthEntry = monthlyStats.find(m => m.month === currentMonthKey);
+    const totalInvestmentCurrentMonth = currentMonthEntry?.totalMonthlyInvestment || 0;
 
-    // Current month profit = current total profit - end-of-previous-month profit
-    const currentMonthIndex = monthlyData.findIndex(
-      (m) => m._id === currentMonthKey
-    );
-    const previousMonthProfit =
-      currentMonthIndex > 0
-        ? monthlyData[currentMonthIndex - 1].totalProfit
-        : 0;
+    // Current month profit
+    const currentMonthIndex = monthlyStats.findIndex(m => m.month === currentMonthKey);
+    const previousMonthProfit = currentMonthIndex > 0 ? monthlyStats[currentMonthIndex - 1].totalProfit : 0;
     const currentMonthProfit = totalProfit - previousMonthProfit;
 
     // Profit in last 6 months
-    const sixMonthIndex = monthlyData.findIndex(
-      (m) => m._id >= sixMonthsAgoKey
-    );
-    const profitBeforeSixMonths =
-      sixMonthIndex > 0 ? monthlyData[sixMonthIndex - 1].totalProfit : 0;
+    const sixMonthsAgoIndex = monthlyStats.findIndex(m => m.month >= sixMonthsAgoKey);
+    const profitBeforeSixMonths = sixMonthsAgoIndex > 0 ? monthlyStats[sixMonthsAgoIndex - 1].totalProfit : 0;
     const profitLastSixMonths = totalProfit - profitBeforeSixMonths;
 
-    // Total profitable months (months where profit increased)
+    // Total profitable months (where cumulative profit increased)
     let totalProfitableMonths = 0;
-    for (let i = 0; i < monthlyData.length; i++) {
-      const currentP = monthlyData[i].totalProfit;
-      const prevP = i > 0 ? monthlyData[i - 1].totalProfit : 0;
-      if (currentP - prevP > 0) totalProfitableMonths++;
+    for (let i = 0; i < monthlyStats.length; i++) {
+      const curr = monthlyStats[i].totalProfit;
+      const prev = i > 0 ? monthlyStats[i - 1].totalProfit : 0;
+      if (curr > prev) totalProfitableMonths++;
     }
 
-    // Target monthly return: 22% yearly → monthly target on current portfolio
+    // Target monthly return (yearly 22%)
     const yearlyTargetRate = 0.22;
-    const monthlyTargetReturn =
-      (totalPortfolioSize * yearlyTargetRate) / 12;
+    const monthlyTargetReturn = (totalPortfolioSize * yearlyTargetRate) / 12;
 
     return NextResponse.json({
       totalAmountInvested,
@@ -131,8 +157,9 @@ export async function GET() {
       currentMonthProfit,
       profitLastSixMonths,
       totalProfitableMonths,
-      totalMonths: monthlyData.length,
+      totalMonths: monthlyStats.length,
       monthlyTargetReturn,
+      monthlyData: monthlyStats // Include new detailed data for charts
     });
   } catch (error) {
     console.error("Dashboard API error:", error);

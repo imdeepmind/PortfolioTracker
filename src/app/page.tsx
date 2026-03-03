@@ -24,86 +24,23 @@ interface DashboardData {
   totalProfitableMonths: number;
   totalMonths: number;
   monthlyTargetReturn: number;
+  monthlyData: {
+    month: string;
+    totalPortfolioSize: number;
+    totalAmountInvested: number;
+    totalProfit: number;
+    totalMonthlyInvestment: number;
+    holdings: {
+      holdingId: string;
+      name: string;
+      risk: string;
+      portfolioSize: number;
+      amountInvested: number;
+      monthlyInvestment: number;
+      profit: number;
+    }[];
+  }[];
 }
-
-// Hardcoded Chart Mock Data
-const mockPortfolioOverviewData = [
-  { month: "Jan", totalInvestment: 100000, portfolioValue: 102000, monthlyInvestment: 20000 },
-  { month: "Feb", totalInvestment: 120000, portfolioValue: 128000, monthlyInvestment: 20000 },
-  { month: "Mar", totalInvestment: 150000, portfolioValue: 155000, monthlyInvestment: 30000 },
-  { month: "Apr", totalInvestment: 170000, portfolioValue: 185000, monthlyInvestment: 20000 },
-  { month: "May", totalInvestment: 200000, portfolioValue: 212000, monthlyInvestment: 30000 },
-  { month: "Jun", totalInvestment: 220000, portfolioValue: 245000, monthlyInvestment: 20000 },
-  { month: "Jul", totalInvestment: 250000, portfolioValue: 270000, monthlyInvestment: 30000 },
-  { month: "Aug", totalInvestment: 270000, portfolioValue: 265000, monthlyInvestment: 20000 },
-  { month: "Sep", totalInvestment: 300000, portfolioValue: 310000, monthlyInvestment: 30000 },
-  { month: "Oct", totalInvestment: 320000, portfolioValue: 345000, monthlyInvestment: 20000 },
-  { month: "Nov", totalInvestment: 350000, portfolioValue: 380000, monthlyInvestment: 30000 },
-  { month: "Dec", totalInvestment: 380000, portfolioValue: 420000, monthlyInvestment: 30000 },
-];
-
-const mockHoldingsRiskDistData = [
-  { name: "High", value: 50 },
-  { name: "Medium", value: 30 },
-  { name: "Low", value: 20 },
-];
-
-const mockMonthlyPnlData = [
-  { month: "Jan", pnl: 2000, pnlPercent: 2.0 },
-  { month: "Feb", pnl: 6000, pnlPercent: 5.0 },
-  { month: "Mar", pnl: -3000, pnlPercent: -1.9 },
-  { month: "Apr", pnl: 10000, pnlPercent: 5.4 },
-  { month: "May", pnl: 7000, pnlPercent: 3.3 },
-  { month: "Jun", pnl: 13000, pnlPercent: 5.3 },
-  { month: "Jul", pnl: 5000, pnlPercent: 1.9 },
-  { month: "Aug", pnl: -25000, pnlPercent: -8.6 },
-  { month: "Sep", pnl: 15000, pnlPercent: 4.8 },
-  { month: "Oct", pnl: 15000, pnlPercent: 4.3 },
-  { month: "Nov", pnl: 5000, pnlPercent: 1.3 },
-  { month: "Dec", pnl: 10000, pnlPercent: 2.4 },
-];
-
-const mockHoldingsPnlData = [
-  { name: "Reliance Ind.", pnlPercent: 25.4 },
-  { name: "TCS", pnlPercent: 18.2 },
-  { name: "HDFC Bank", pnlPercent: -5.6 },
-  { name: "Infosys", pnlPercent: 12.1 },
-  { name: "ITC", pnlPercent: -2.3 },
-];
-
-interface HoldingDataPoint {
-  month: string;
-  totalInvestment: number;
-  portfolioValue: number;
-  monthlyInvestment: number;
-}
-
-const mockHoldingDetailData: Record<string, HoldingDataPoint[]> = {
-  "Reliance Ind.": [
-    { month: "Jan", totalInvestment: 30000, portfolioValue: 31000, monthlyInvestment: 5000 },
-    { month: "Feb", totalInvestment: 35000, portfolioValue: 38000, monthlyInvestment: 5000 },
-    { month: "Mar", totalInvestment: 40000, portfolioValue: 45000, monthlyInvestment: 5000 },
-    { month: "Apr", totalInvestment: 50000, portfolioValue: 58000, monthlyInvestment: 10000 },
-    { month: "May", totalInvestment: 55000, portfolioValue: 65000, monthlyInvestment: 5000 },
-    { month: "Jun", totalInvestment: 60000, portfolioValue: 75240, monthlyInvestment: 5000 },
-  ],
-  "TCS": [
-    { month: "Jan", totalInvestment: 20000, portfolioValue: 20500, monthlyInvestment: 20000 },
-    { month: "Feb", totalInvestment: 25000, portfolioValue: 27000, monthlyInvestment: 5000 },
-    { month: "Mar", totalInvestment: 30000, portfolioValue: 31000, monthlyInvestment: 5000 },
-    { month: "Apr", totalInvestment: 35000, portfolioValue: 37500, monthlyInvestment: 5000 },
-    { month: "May", totalInvestment: 40000, portfolioValue: 44000, monthlyInvestment: 5000 },
-    { month: "Jun", totalInvestment: 45000, portfolioValue: 53750, monthlyInvestment: 5000 },
-  ],
-  "HDFC Bank": [
-    { month: "Jan", totalInvestment: 15000, portfolioValue: 14500, monthlyInvestment: 5000 },
-    { month: "Feb", totalInvestment: 20000, portfolioValue: 19000, monthlyInvestment: 5000 },
-    { month: "Mar", totalInvestment: 25000, portfolioValue: 23000, monthlyInvestment: 5000 },
-    { month: "Apr", totalInvestment: 30000, portfolioValue: 28500, monthlyInvestment: 5000 },
-    { month: "May", totalInvestment: 35000, portfolioValue: 34000, monthlyInvestment: 5000 },
-    { month: "Jun", totalInvestment: 40000, portfolioValue: 37760, monthlyInvestment: 5000 },
-  ]
-};
 
 export default function HomePage() {
   const [data, setData] = useState<DashboardData | null>(null);
@@ -128,6 +65,73 @@ export default function HomePage() {
   const profitTrend = (v: number): "up" | "down" | "neutral" =>
     v > 0 ? "up" : v < 0 ? "down" : "neutral";
 
+  // --- Data Transformations ---
+  
+  // 1. Portfolio Overview
+  const portfolioOverviewData = data?.monthlyData.map(m => ({
+    month: m.month,
+    totalInvestment: m.totalAmountInvested,
+    portfolioValue: m.totalPortfolioSize,
+    monthlyInvestment: m.totalMonthlyInvestment
+  })) || [];
+
+  // 2. Risk Distribution (from latest month)
+  const latestMonth = data?.monthlyData[data.monthlyData.length - 1];
+  const riskDistributionData = (() => {
+    if (!latestMonth) return [];
+    const riskTotals: Record<string, number> = { High: 0, Medium: 0, Low: 0 };
+    latestMonth.holdings.forEach(h => {
+      const risk = h.risk || "high";
+      const riskKey = risk.charAt(0).toUpperCase() + risk.slice(1);
+      if (riskTotals[riskKey] !== undefined) {
+        riskTotals[riskKey] += h.portfolioSize;
+      }
+    });
+    const total = latestMonth.totalPortfolioSize || 1;
+    return Object.entries(riskTotals).map(([name, value]) => ({
+      name,
+      value: Number(((value / total) * 100).toFixed(1))
+    }));
+  })();
+
+  // 3. Monthly P&L
+  const monthlyPnlData = data?.monthlyData.map((m, i) => {
+    const prev = i > 0 ? data.monthlyData[i - 1] : { totalPortfolioSize: 0, totalProfit: 0 };
+    const pnl = m.totalProfit - prev.totalProfit;
+    const pnlPercent = prev.totalPortfolioSize > 0 
+      ? (pnl / prev.totalPortfolioSize) * 100 
+      : 0;
+    return {
+      month: m.month,
+      pnl,
+      pnlPercent: Number(pnlPercent.toFixed(2))
+    };
+  }) || [];
+
+  // 4. Holdings P&L (latest month)
+  const holdingsPnlData = latestMonth?.holdings.map(h => ({
+    name: h.name,
+    pnlPercent: h.amountInvested > 0 ? Number(((h.profit / h.amountInvested) * 100).toFixed(2)) : 0
+  })).sort((a,b) => b.pnlPercent - a.pnlPercent) || [];
+
+  // 5. Per-Holding History
+  const holdingDetailData = (() => {
+    if (!data) return {};
+    const details: Record<string, any[]> = {};
+    data.monthlyData.forEach(m => {
+      m.holdings.forEach(h => {
+        if (!details[h.name]) details[h.name] = [];
+        details[h.name].push({
+          month: m.month,
+          totalInvestment: h.amountInvested,
+          portfolioValue: h.portfolioSize,
+          monthlyInvestment: h.monthlyInvestment
+        });
+      });
+    });
+    return details;
+  })();
+
   return (
     <DashboardLayout>
       <div className="mb-8">
@@ -145,7 +149,7 @@ export default function HomePage() {
         </div>
       ) : (
         <>
-          {/* Stat Cards - Adjusted to 8 cols on ultrawide */}
+          {/* Stat Cards */}
           <div className="grid gap-4 grid-cols-1 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-8 relative z-10">
             <StatCard
               label="Total Amount Invested"
@@ -254,28 +258,28 @@ export default function HomePage() {
             
             {/* Portfolio Overview */}
             <div className="h-[400px]">
-              <PortfolioOverviewChart data={mockPortfolioOverviewData} />
+              <PortfolioOverviewChart data={portfolioOverviewData} />
             </div>
 
-            {/* Middle row: Holdings Pie + Monthly PnL Bar/Line */}
+            {/* Middle row: Risk Dist + Monthly PnL */}
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 h-auto xl:h-[400px]">
               <div className="h-[350px] xl:h-full">
-                <HoldingsDistributionChart data={mockHoldingsRiskDistData} />
+                <HoldingsDistributionChart data={riskDistributionData} />
               </div>
               <div className="h-[350px] xl:h-full">
-                <MonthlyPnLChart data={mockMonthlyPnlData} />
+                <MonthlyPnLChart data={monthlyPnlData} />
               </div>
             </div>
 
             {/* Holdings PnL */}
             <div className="h-[400px]">
-              <HoldingsPnLChart data={mockHoldingsPnlData} />
+              <HoldingsPnLChart data={holdingsPnlData} />
             </div>
 
             {/* Individual Holding Overviews */}
             <div className="pt-2">
               <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6">
-                {Object.entries(mockHoldingDetailData).map(([name, history]) => (
+                {Object.entries(holdingDetailData).map(([name, history]) => (
                   <div key={name} className="h-[400px]">
                     <HoldingDetailChart holdingName={name} data={history} />
                   </div>
