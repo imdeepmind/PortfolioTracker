@@ -22,7 +22,7 @@ interface HoldingsPnLChartProps {
   data: HoldingPnLData[];
 }
 
-export default function HoldingsPnLChart({ data}: HoldingsPnLChartProps) {
+export default function HoldingsPnLChart({ data }: HoldingsPnLChartProps) {
   return (
     <GlassCard padding="md" className="w-full h-full flex flex-col">
       <h3 className="text-lg font-semibold text-white mb-4">Holdings Performance (%)</h3>
@@ -30,18 +30,18 @@ export default function HoldingsPnLChart({ data}: HoldingsPnLChartProps) {
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} layout="vertical" margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" horizontal={false} />
-            <XAxis 
+            <XAxis
               type="number"
-              stroke="rgba(255,255,255,0.4)" 
+              stroke="rgba(255,255,255,0.4)"
               axisLine={false}
               tickLine={false}
               tick={{ fontSize: 12, fill: "#fff" }}
               tickFormatter={(value) => `${value}%`}
             />
-            <YAxis 
+            <YAxis
               dataKey="name"
               type="category"
-              stroke="rgba(255,255,255,0.7)" 
+              stroke="rgba(255,255,255,0.7)"
               axisLine={false}
               tickLine={false}
               tick={{ fontSize: 12, fill: "#fff" }}
@@ -49,6 +49,7 @@ export default function HoldingsPnLChart({ data}: HoldingsPnLChartProps) {
               interval={0}
             />
             <Tooltip
+              cursor={false}
               contentStyle={{
                 backgroundColor: "rgba(17, 17, 48, 0.9)",
                 borderColor: "rgba(255, 255, 255, 0.1)",
@@ -60,7 +61,7 @@ export default function HoldingsPnLChart({ data}: HoldingsPnLChartProps) {
               formatter={(value: any) => [`${value}%`, "Return"]}
             />
             <Bar dataKey="pnlPercent" radius={[0, 4, 4, 0]}>
-               {data.map((entry, index) => (
+              {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.pnlPercent >= 0 ? '#34d399' : '#f87171'} fillOpacity={0.8} />
               ))}
             </Bar>
