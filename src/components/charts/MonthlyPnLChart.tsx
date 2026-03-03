@@ -49,6 +49,10 @@ export default function MonthlyPnLChart({ data }: MonthlyPnLChartProps) {
               tick={{ fontSize: 12, fill: "#fff" }}
               tickFormatter={formatCurrency}
               width={100}
+              domain={([dataMin, dataMax]) => {
+                const max = Math.max(Math.abs(dataMin), Math.abs(dataMax));
+                return [-max, max];
+              }}
             />
             <YAxis 
               yAxisId="right" 
@@ -58,7 +62,11 @@ export default function MonthlyPnLChart({ data }: MonthlyPnLChartProps) {
               tickLine={false}
               tick={{ fontSize: 12, fill: "#fff" }}
               tickFormatter={(value) => `${value}%`}
-              width={30}
+              width={60}
+              domain={([dataMin, dataMax]) => {
+                const max = Math.max(Math.abs(dataMin), Math.abs(dataMax));
+                return [-max, max];
+              }}
             />
             <Tooltip
               contentStyle={{
