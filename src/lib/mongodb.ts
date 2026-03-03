@@ -28,7 +28,7 @@ async function dbConnect(): Promise<typeof mongoose> {
   }
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI);
+    cached.promise = mongoose.connect(MONGODB_URI, {dbName: 'portfolio-tracker'});
   }
 
   cached.conn = await cached.promise;
