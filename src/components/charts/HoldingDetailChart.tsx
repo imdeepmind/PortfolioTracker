@@ -27,6 +27,8 @@ interface HoldingDetailChartProps {
 }
 
 export default function HoldingDetailChart({ holdingName, data }: HoldingDetailChartProps) {
+  const sanitizedName = holdingName.replace(/\s+/g, '-');
+
   return (
     <GlassCard padding="md" className="w-full h-full flex flex-col">
       <h3 className="text-lg font-semibold text-white mb-4">{holdingName} Performance</h3>
@@ -34,42 +36,48 @@ export default function HoldingDetailChart({ holdingName, data }: HoldingDetailC
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
             <defs>
-              <linearGradient id={`colorHoldingPort-${holdingName}`} x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id={`colorHoldingPort-${sanitizedName}`} x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#818cf8" stopOpacity={0.3} />
                 <stop offset="95%" stopColor="#818cf8" stopOpacity={0} />
               </linearGradient>
-              <linearGradient id={`colorHoldingInv-${holdingName}`} x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id={`colorHoldingInv-${sanitizedName}`} x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#34d399" stopOpacity={0.3} />
                 <stop offset="95%" stopColor="#34d399" stopOpacity={0} />
               </linearGradient>
+              <linearGradient id={`colorHoldingMonthly-${sanitizedName}`} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#f87171" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="#f87171" stopOpacity={0} />
+              </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-            <XAxis 
-              dataKey="month" 
-              stroke="rgba(255,255,255,0.4)" 
+            <XAxis
+              dataKey="month"
+              stroke="rgba(255,255,255,0.4)"
               axisLine={false}
               tickLine={false}
               tick={{ fontSize: 10, fill: "#fff" }}
               dy={10}
             />
-            <YAxis 
+            <YAxis
               yAxisId="left"
-              stroke="rgba(255,255,255,0.4)" 
+              stroke="rgba(255,255,255,0.4)"
               axisLine={false}
               tickLine={false}
               tick={{ fontSize: 10, fill: "#fff" }}
               tickFormatter={formatCurrency}
               width={60}
+              domain={[0, 'auto']}
             />
-            <YAxis 
-              yAxisId="right" 
-              orientation="right" 
-              stroke="rgba(255,255,255,0.4)" 
+            <YAxis
+              yAxisId="right"
+              orientation="right"
+              stroke="rgba(255,255,255,0.4)"
               axisLine={false}
               tickLine={false}
               tick={{ fontSize: 10, fill: "#fff" }}
               tickFormatter={formatCurrency}
               width={60}
+              domain={[0, 'auto']}
             />
             <Tooltip
               contentStyle={{
@@ -80,13 +88,14 @@ export default function HoldingDetailChart({ holdingName, data }: HoldingDetailC
                 backdropFilter: "blur(8px)"
               }}
               itemStyle={{ color: "#e2e8f0" }}
+              formatter={(value: any, name: any) => [formatCurrency(Number(value)), name]}
             />
-            <Legend 
-                          verticalAlign="bottom" 
-                          height={36}
-                          iconType="circle"
-                          wrapperStyle={{ fontSize: "12px", paddingTop: "20px" }}
-                        />
+            <Legend
+              verticalAlign="bottom"
+              height={36}
+              iconType="circle"
+              wrapperStyle={{ fontSize: "12px", paddingTop: "20px" }}
+            />
             <Area
               yAxisId="left"
               type="monotone"
@@ -95,7 +104,7 @@ export default function HoldingDetailChart({ holdingName, data }: HoldingDetailC
               stroke="#818cf8"
               strokeWidth={2}
               fillOpacity={1}
-              fill={`url(#colorHoldingPort-${holdingName})`}
+              fill={`url(#colorHoldingPort-${sanitizedName})`}
             />
             <Area
               yAxisId="left"
@@ -105,7 +114,7 @@ export default function HoldingDetailChart({ holdingName, data }: HoldingDetailC
               stroke="#34d399"
               strokeWidth={2}
               fillOpacity={1}
-              fill={`url(#colorHoldingInv-${holdingName})`}
+              fill={`url(#colorHoldingInv-${sanitizedName})`}
             />
             <Area
               yAxisId="right"
@@ -114,7 +123,8 @@ export default function HoldingDetailChart({ holdingName, data }: HoldingDetailC
               name="Monthly Investment"
               stroke="#f87171"
               strokeWidth={2}
-              fillOpacity={0}
+              fillOpacity={1}
+              fill={`url(#colorHoldingMonthly-${sanitizedName})`}
             />
           </AreaChart>
         </ResponsiveContainer>

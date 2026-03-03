@@ -87,6 +87,12 @@ export async function GET() {
         };
       });
 
+      // Map monthly investments from current month's transactions
+      const monthlyInvestmentsMap: Record<string, number> = {};
+      monthData.holdings.forEach((h: any) => {
+        monthlyInvestmentsMap[h.holdingId.toString()] = h.monthlyInvestment;
+      });
+
       // Calculate overall cumulative totals at the end of this month
       let totalPortfolioSize = 0;
       let totalAmountInvested = 0;
@@ -98,6 +104,7 @@ export async function GET() {
         allHoldingsSnapshot.push({
           holdingId: id,
           ...state,
+          monthlyInvestment: monthlyInvestmentsMap[id] || 0,
           profit: state.portfolioSize - state.amountInvested
         });
       });
