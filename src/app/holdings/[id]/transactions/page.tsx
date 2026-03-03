@@ -6,12 +6,10 @@ import toast from "react-hot-toast";
 import DashboardLayout from "@/components/items/DashboardLayout";
 import ConfirmationModal from "@/components/items/ConfirmationModal";
 import { PageSpinner } from "@/components/bits/Spinner";
-import Spinner from "@/components/bits/Spinner";
 import PageHeader from "@/components/bits/PageHeader";
 import EmptyState from "@/components/bits/EmptyState";
 import Button from "@/components/bits/Button";
 import BackLink from "@/components/bits/BackLink";
-import IconButton from "@/components/bits/IconButton";
 import { formatCurrency, formatDateTime } from "@/lib/constants";
 
 interface Transaction {
@@ -30,18 +28,6 @@ interface HoldingInfo {
 const PlusIcon = (
   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-  </svg>
-);
-
-const EditIcon = (
-  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-  </svg>
-);
-
-const TrashIcon = (
-  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
   </svg>
 );
 
@@ -160,21 +146,25 @@ export default function TransactionsPage({
                         </span>
                       </td>
                       <td className="px-6 py-4 text-right whitespace-nowrap">
-                        <div className="flex items-center justify-end gap-2">
+                        <div className="flex items-center justify-end gap-1">
                           <Link
                             href={`/holdings/${holdingId}/transactions/${tx._id}/edit`}
-                            className="p-2 rounded-lg bg-white/[0.06] border border-white/[0.1] text-gray-400 hover:text-white hover:bg-white/[0.1] transition-all duration-200"
+                            className="p-1.5 rounded-md text-gray-500 hover:text-white hover:bg-white/[0.1] transition-all duration-200"
                             title="Edit"
                           >
-                            {EditIcon}
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
                           </Link>
-                          <IconButton
-                            variant="danger"
-                            size="sm"
+                          <button
                             onClick={() => setDeleteTarget(tx._id)}
+                            className="p-1.5 rounded-md text-gray-500 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 cursor-pointer"
                             title="Delete"
-                            icon={deleteTarget === tx._id ? <Spinner size="sm" /> : TrashIcon}
-                          />
+                          >
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </button>
                         </div>
                       </td>
                     </tr>

@@ -7,6 +7,7 @@ import DashboardLayout from "@/components/items/DashboardLayout";
 import GlassCard from "@/components/bits/GlassCard";
 import Input from "@/components/bits/Input";
 import Textarea from "@/components/bits/Textarea";
+import Select, { RISK_OPTIONS } from "@/components/bits/Select";
 import Button from "@/components/bits/Button";
 import BackLink from "@/components/bits/BackLink";
 
@@ -14,6 +15,7 @@ export default function NewHoldingPage() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [risk, setRisk] = useState("high");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -24,7 +26,7 @@ export default function NewHoldingPage() {
       const res = await fetch("/api/holdings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, description }),
+        body: JSON.stringify({ name, description, risk }),
       });
 
       const data = await res.json();
@@ -73,6 +75,14 @@ export default function NewHoldingPage() {
               rows={4}
               placeholder="Optional description for this holding..."
               maxLength={500}
+            />
+
+            <Select
+              id="risk"
+              label="Risk Level"
+              value={risk}
+              onChange={(e) => setRisk(e.target.value)}
+              options={RISK_OPTIONS}
             />
 
             <div className="flex items-center gap-3 pt-2">

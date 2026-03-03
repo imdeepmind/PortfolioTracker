@@ -5,10 +5,19 @@ import Link from "next/link";
 import GlassCard from "@/components/bits/GlassCard";
 import { formatCurrency, formatDate } from "@/lib/constants";
 
+type RiskLevel = "low" | "medium" | "high";
+
+const riskConfig: Record<RiskLevel, { label: string; color: string; bg: string }> = {
+  low: { label: "Low", color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/20" },
+  medium: { label: "Medium", color: "text-amber-400", bg: "bg-amber-500/10 border-amber-500/20" },
+  high: { label: "High", color: "text-red-400", bg: "bg-red-500/10 border-red-500/20" },
+};
+
 interface HoldingCardProps {
   id: string;
   name: string;
   description?: string;
+  risk?: RiskLevel;
   createdAt: string;
   totalAmountInvested: number;
   totalPortfolioSize: number;
@@ -19,6 +28,7 @@ export default function HoldingCard({
   id,
   name,
   description,
+  risk = "high",
   createdAt,
   totalAmountInvested,
   totalPortfolioSize,
@@ -29,12 +39,16 @@ export default function HoldingCard({
     totalAmountInvested !== 0 ? (profit / totalAmountInvested) * 100 : 0;
   const isPositive = profit >= 0;
   const hasData = totalAmountInvested !== 0 || totalPortfolioSize !== 0;
+  const riskInfo = riskConfig[risk] || riskConfig.high;
 
   return (
     <GlassCard padding="md" className="hover:bg-white/[0.06] transition-all duration-200 group flex flex-col">
-      {/* Top row: action buttons */}
-      <div className="flex items-center justify-end">
-        <div className="flex items-center gap-1 shrink-0">
+      {/* Top row: risk badge + action buttons */}
+      <div className="flex items-center justify-between mb-3">
+        <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider border ${riskInfo.bg} ${riskInfo.color}`}>
+          {riskInfo.label}
+        </span>
+        <div className="flex items-center gap-1">
           <Link
             href={`/holdings/${id}/transactions`}
             className="p-1.5 rounded-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-500/10 transition-all duration-200"
@@ -66,19 +80,16 @@ export default function HoldingCard({
       </div>
 
       {/* Name and description */}
-      <div className="flex items-center gap-1 shrink-0 mb-3">
-        <div className="min-w-0 flex-1">
-          <Link href={`/holdings/${id}/transactions`}>
-            <h3 className="text-white font-semibold text-lg truncate hover:text-indigo-300 transition-colors cursor-pointer">
-              {name}
-            </h3>
-          </Link>
-          {description && (
-            <p className="text-gray-500 text-xs mt-1 line-clamp-1">{description}</p>
-          )}
-        </div>
-
-      </div> 
+      <div className="mb-3">
+        <Link href={`/holdings/${id}/transactions`}>
+          <h3 className="text-white font-semibold text-lg truncate hover:text-indigo-300 transition-colors cursor-pointer">
+            {name}
+          </h3>
+        </Link>
+        {description && (
+          <p className="text-gray-500 text-xs mt-1 line-clamp-1">{description}</p>
+        )}
+      </div>
 
       {/* Financial stats */}
       <div className="border-t border-white/[0.06] pt-3 mt-auto">

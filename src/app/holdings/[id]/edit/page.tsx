@@ -7,6 +7,7 @@ import DashboardLayout from "@/components/items/DashboardLayout";
 import GlassCard from "@/components/bits/GlassCard";
 import Input from "@/components/bits/Input";
 import Textarea from "@/components/bits/Textarea";
+import Select, { RISK_OPTIONS } from "@/components/bits/Select";
 import Button from "@/components/bits/Button";
 import BackLink from "@/components/bits/BackLink";
 import { PageSpinner } from "@/components/bits/Spinner";
@@ -20,6 +21,7 @@ export default function EditHoldingPage({
   const router = useRouter();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [risk, setRisk] = useState("high");
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
 
@@ -31,6 +33,7 @@ export default function EditHoldingPage({
         const data = await res.json();
         setName(data.name);
         setDescription(data.description || "");
+        setRisk(data.risk || "high");
       } catch {
         toast.error("Failed to load holding");
         router.push("/holdings");
@@ -49,7 +52,7 @@ export default function EditHoldingPage({
       const res = await fetch(`/api/holdings/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, description }),
+        body: JSON.stringify({ name, description, risk }),
       });
 
       const data = await res.json();
@@ -106,6 +109,14 @@ export default function EditHoldingPage({
               rows={4}
               placeholder="Optional description for this holding..."
               maxLength={500}
+            />
+
+            <Select
+              id="risk"
+              label="Risk Level"
+              value={risk}
+              onChange={(e) => setRisk(e.target.value)}
+              options={RISK_OPTIONS}
             />
 
             <div className="flex items-center gap-3 pt-2">

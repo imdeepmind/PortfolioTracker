@@ -52,6 +52,7 @@ export async function GET() {
         $project: {
           name: 1,
           description: 1,
+          risk: 1,
           createdAt: 1,
           totalAmountInvested: {
             $ifNull: ["$latestTx.totalAmountInvested", 0],
@@ -81,7 +82,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { name, description } = await req.json();
+    const { name, description, risk } = await req.json();
 
     if (!name || name.trim().length === 0) {
       return NextResponse.json(
@@ -95,6 +96,7 @@ export async function POST(req: NextRequest) {
     const holding = await Holding.create({
       name: name.trim(),
       description: description?.trim() || "",
+      risk: risk || "high",
       user: (session.user as { id: string }).id,
     });
 

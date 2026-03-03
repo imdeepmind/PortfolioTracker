@@ -52,7 +52,7 @@ export async function PUT(
     }
 
     const { id } = await params;
-    const { name, description } = await req.json();
+    const { name, description, risk } = await req.json();
 
     if (!name || name.trim().length === 0) {
       return NextResponse.json(
@@ -65,7 +65,11 @@ export async function PUT(
 
     const holding = await Holding.findOneAndUpdate(
       { _id: id, user: (session.user as { id: string }).id },
-      { name: name.trim(), description: description?.trim() || "" },
+      {
+        name: name.trim(),
+        description: description?.trim() || "",
+        ...(risk && { risk }),
+      },
       { new: true }
     );
 

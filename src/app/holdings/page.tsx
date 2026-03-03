@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import toast from "react-hot-toast";
 import DashboardLayout from "@/components/items/DashboardLayout";
 import HoldingCard from "@/components/items/HoldingCard";
@@ -14,10 +14,14 @@ interface Holding {
   _id: string;
   name: string;
   description: string;
+  risk?: "low" | "medium" | "high";
   createdAt: string;
   totalAmountInvested: number;
   totalPortfolioSize: number;
 }
+
+type SortKey = "name" | "return" | "invested" | "portfolio";
+type SortDir = "asc" | "desc";
 
 const PlusIcon = (
   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -25,10 +29,19 @@ const PlusIcon = (
   </svg>
 );
 
+const sortOptions: { key: SortKey; label: string }[] = [
+  { key: "name", label: "Name" },
+  { key: "return", label: "Return %" },
+  { key: "invested", label: "Invested" },
+  { key: "portfolio", label: "Portfolio" },
+];
+
 export default function HoldingsListPage() {
   const [holdings, setHoldings] = useState<Holding[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null);
+  const [sortKey, setSortKey] = useState<SortKey>("name");
+  const [sortDir, setSortDir] = useState<SortDir>("asc");
 
   const fetchHoldings = async () => {
     try {
@@ -46,6 +59,40 @@ export default function HoldingsListPage() {
   useEffect(() => {
     fetchHoldings();
   }, []);
+
+  const sortedHoldings = useMemo(() => {
+    const sorted = [...holdings].sort((a, b) => {
+      let cmp = 0;
+      switch (sortKey) {
+        case "name":
+          cmp = a.name.localeCompare(b.name);
+          break;
+        case "return": {
+          const retA = a.totalAmountInvested ? ((a.totalPortfolioSize - a.totalAmountInvested) / a.totalAmountInvested) * 100 : 0;
+          const retB = b.totalAmountInvested ? ((b.totalPortfolioSize - b.totalAmountInvested) / b.totalAmountInvested) * 100 : 0;
+          cmp = retA - retB;
+          break;
+        }
+        case "invested":
+          cmp = a.totalAmountInvested - b.totalAmountInvested;
+          break;
+        case "portfolio":
+          cmp = a.totalPortfolioSize - b.totalPortfolioSize;
+          break;
+      }
+      return sortDir === "desc" ? -cmp : cmp;
+    });
+    return sorted;
+  }, [holdings, sortKey, sortDir]);
+
+  const handleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortDir("asc");
+    }
+  };
 
   const handleDeleteConfirm = async () => {
     if (!deleteTarget) return;
@@ -95,20 +142,49 @@ export default function HoldingsListPage() {
           }
         />
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {holdings.map((holding) => (
-            <HoldingCard
-              key={holding._id}
-              id={holding._id}
-              name={holding.name}
-              description={holding.description}
-              createdAt={holding.createdAt}
-              totalAmountInvested={holding.totalAmountInvested}
-              totalPortfolioSize={holding.totalPortfolioSize}
-              onDelete={() => setDeleteTarget({ id: holding._id, name: holding.name })}
-            />
-          ))}
-        </div>
+        <>
+          {/* Sort bar */}
+          <div className="flex items-center gap-2 mb-5 flex-wrap">
+            <span className="text-xs text-gray-500 uppercase tracking-wider mr-1">Sort by</span>
+            {sortOptions.map((opt) => {
+              const isActive = sortKey === opt.key;
+              return (
+                <button
+                  key={opt.key}
+                  onClick={() => handleSort(opt.key)}
+                  className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer ${
+                    isActive
+                      ? "bg-indigo-500/15 text-indigo-300 border border-indigo-500/20"
+                      : "bg-white/[0.04] text-gray-400 border border-white/[0.06] hover:bg-white/[0.08] hover:text-white"
+                  }`}
+                >
+                  {opt.label}
+                  {isActive && (
+                    <svg className={`w-3 h-3 transition-transform ${sortDir === "desc" ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                    </svg>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {sortedHoldings.map((holding) => (
+              <HoldingCard
+                key={holding._id}
+                id={holding._id}
+                name={holding.name}
+                description={holding.description}
+                risk={holding.risk}
+                createdAt={holding.createdAt}
+                totalAmountInvested={holding.totalAmountInvested}
+                totalPortfolioSize={holding.totalPortfolioSize}
+                onDelete={() => setDeleteTarget({ id: holding._id, name: holding.name })}
+              />
+            ))}
+          </div>
+        </>
       )}
 
       <ConfirmationModal
