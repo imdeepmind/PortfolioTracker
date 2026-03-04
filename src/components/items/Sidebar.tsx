@@ -29,6 +29,15 @@ const navLinks = [
       </svg>
     ),
   },
+  {
+    href: "/ledger",
+    label: "Ledger",
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+      </svg>
+    ),
+  },
 ];
 
 export default function Sidebar({ open, onClose }: SidebarProps) {
@@ -60,11 +69,10 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
                 key={link.href}
                 href={link.href}
                 onClick={onClose}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
-                  isActive
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${isActive
                     ? "bg-indigo-500/15 text-indigo-300 border border-indigo-500/20"
                     : "text-gray-400 hover:text-white hover:bg-white/[0.06] border border-transparent"
-                }`}
+                  }`}
               >
                 {link.icon}
                 {link.label}
@@ -107,9 +115,8 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
 
       {/* Mobile drawer */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#0d0d1a]/95 backdrop-blur-xl border-r border-white/[0.06] transform transition-transform duration-300 ease-in-out lg:hidden ${
-          open ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#0d0d1a]/95 backdrop-blur-xl border-r border-white/[0.06] transform transition-transform duration-300 ease-in-out lg:hidden ${open ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         {sidebarContent}
       </aside>
