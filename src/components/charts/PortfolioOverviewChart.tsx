@@ -12,7 +12,7 @@ import {
   Legend,
 } from 'recharts';
 import GlassCard from '@/components/bits/GlassCard';
-import { formatCurrency } from '@/lib/constants';
+import { formatCurrency, formatCurrencyNoDecimal } from '@/lib/constants';
 
 interface DataPoint {
   month: string;
@@ -57,7 +57,7 @@ export default function PortfolioOverviewChart({ data }: PortfolioOverviewChartP
               axisLine={false}
               tickLine={false}
               tick={{ fontSize: 12, fill: '#fff' }}
-              tickFormatter={formatCurrency}
+              tickFormatter={formatCurrencyNoDecimal}
             />
             <YAxis
               yAxisId="right"
@@ -66,7 +66,7 @@ export default function PortfolioOverviewChart({ data }: PortfolioOverviewChartP
               axisLine={false}
               tickLine={false}
               tick={{ fontSize: 12, fill: '#fff' }}
-              tickFormatter={formatCurrency}
+              tickFormatter={formatCurrencyNoDecimal}
             />
             <Tooltip
               contentStyle={{
