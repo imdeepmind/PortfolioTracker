@@ -9,12 +9,6 @@ export const formatCurrency = (amount: number): string =>
     style: 'currency',
     currency: CURRENCY.code,
     minimumFractionDigits: 2,
-  }).format(amount);
-
-export const formatCompactCurrency = (amount: number): string =>
-  new Intl.NumberFormat(CURRENCY.locale, {
-    style: 'currency',
-    currency: CURRENCY.code,
     notation: 'compact',
   }).format(amount);
 

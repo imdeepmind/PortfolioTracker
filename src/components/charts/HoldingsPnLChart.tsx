@@ -71,7 +71,7 @@ export default function HoldingsPnLChart({ data }: HoldingsPnLChartProps) {
                 name || 'Return',
               ]}
             />
-            <Bar dataKey="pnlPercent" radius={[0, 4, 4, 0]}>
+            <Bar dataKey="pnlPercent" name="P&L %" radius={[0, 4, 4, 0]}>
               {data.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}

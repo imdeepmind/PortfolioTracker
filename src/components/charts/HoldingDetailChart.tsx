@@ -12,7 +12,7 @@ import {
   Legend,
 } from 'recharts';
 import GlassCard from '@/components/bits/GlassCard';
-import { formatCurrency, formatCompactCurrency } from '@/lib/constants';
+import { formatCurrency } from '@/lib/constants';
 
 interface HoldingDataPoint {
   month: string;
@@ -70,7 +70,7 @@ export default function HoldingDetailChart({ holdingName, data }: HoldingDetailC
               axisLine={false}
               tickLine={false}
               tick={{ fontSize: 10, fill: '#fff' }}
-              tickFormatter={formatCompactCurrency}
+              tickFormatter={formatCurrency}
               domain={[0, 'auto']}
             />
             <YAxis
@@ -80,7 +80,7 @@ export default function HoldingDetailChart({ holdingName, data }: HoldingDetailC
               axisLine={false}
               tickLine={false}
               tick={{ fontSize: 10, fill: '#fff' }}
-              tickFormatter={formatCompactCurrency}
+              tickFormatter={formatCurrency}
               domain={[0, 'auto']}
             />
             <Tooltip
