@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const MONGODB_URI = process.env.MONGODB_URI!;
 
 if (!MONGODB_URI) {
-  throw new Error("Please define the MONGODB_URI environment variable in .env.local");
+  throw new Error('Please define the MONGODB_URI environment variable in .env.local');
 }
 
 interface MongooseCache {
@@ -12,7 +12,6 @@ interface MongooseCache {
 }
 
 declare global {
-  // eslint-disable-next-line no-var
   var mongooseCache: MongooseCache | undefined;
 }
 
@@ -28,7 +27,7 @@ async function dbConnect(): Promise<typeof mongoose> {
   }
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI, {dbName: 'portfolio-tracker'});
+    cached.promise = mongoose.connect(MONGODB_URI, { dbName: 'portfolio-tracker' });
   }
 
   cached.conn = await cached.promise;

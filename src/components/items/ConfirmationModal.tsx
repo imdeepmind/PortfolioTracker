@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import Button from "@/components/bits/Button";
+import React, { useState } from 'react';
+import Button from '@/components/bits/Button';
 
 interface ConfirmationModalProps {
   isOpen: boolean;
@@ -16,7 +16,7 @@ export default function ConfirmationModal({
   isOpen,
   title,
   message,
-  confirmLabel = "Delete",
+  confirmLabel = 'Delete',
   onConfirm,
   onCancel,
 }: ConfirmationModalProps) {
@@ -45,7 +45,12 @@ export default function ConfirmationModal({
       <div className="relative w-full max-w-md backdrop-blur-xl bg-[#1a1a2e]/95 border border-white/[0.1] rounded-2xl p-6 shadow-2xl shadow-black/40">
         {/* Warning icon */}
         <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 mb-4 mx-auto">
-          <svg className="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            className="w-6 h-6 text-red-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -55,18 +60,11 @@ export default function ConfirmationModal({
           </svg>
         </div>
 
-        <h3 className="text-lg font-semibold text-white text-center mb-2">
-          {title}
-        </h3>
+        <h3 className="text-lg font-semibold text-white text-center mb-2">{title}</h3>
         <p className="text-gray-400 text-sm text-center mb-6">{message}</p>
 
         <div className="flex items-center gap-3 justify-end">
-          <Button
-            variant="secondary"
-            size="md"
-            onClick={onCancel}
-            disabled={loading}
-          >
+          <Button variant="secondary" size="md" onClick={onCancel} disabled={loading}>
             Cancel
           </Button>
           <Button

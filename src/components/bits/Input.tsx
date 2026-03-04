@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -6,21 +6,13 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   required?: boolean;
 }
 
-export default function Input({
-  label,
-  helperText,
-  required,
-  id,
-  ...rest
-}: InputProps) {
+export default function Input({ label, helperText, required, id, ...rest }: InputProps) {
   return (
     <div>
       <label htmlFor={id} className="block text-sm font-medium text-gray-300 mb-2">
         {label} {required && <span className="text-red-400">*</span>}
       </label>
-      {helperText && (
-        <p className="text-xs text-gray-500 mb-2">{helperText}</p>
-      )}
+      {helperText && <p className="text-xs text-gray-500 mb-2">{helperText}</p>}
       <input
         id={id}
         required={required}

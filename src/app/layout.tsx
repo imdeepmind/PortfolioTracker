@@ -1,17 +1,17 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import AuthProvider from "@/components/items/AuthProvider";
-import { Toaster } from "react-hot-toast";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import AuthProvider from '@/components/items/AuthProvider';
+import { Toaster } from 'react-hot-toast';
 
 const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
+  subsets: ['latin'],
+  variable: '--font-inter',
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio Tracker",
-  description: "Track and manage your investment portfolio",
+  title: 'Portfolio Tracker',
+  description: 'Track and manage your investment portfolio',
 };
 
 export default function RootLayout({
@@ -28,17 +28,17 @@ export default function RootLayout({
           toastOptions={{
             duration: 4000,
             style: {
-              background: "rgba(30, 30, 50, 0.95)",
-              color: "#ededed",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-              borderRadius: "12px",
-              backdropFilter: "blur(12px)",
+              background: 'rgba(30, 30, 50, 0.95)',
+              color: '#ededed',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              borderRadius: '12px',
+              backdropFilter: 'blur(12px)',
             },
             success: {
-              iconTheme: { primary: "#34d399", secondary: "#0a0a1a" },
+              iconTheme: { primary: '#34d399', secondary: '#0a0a1a' },
             },
             error: {
-              iconTheme: { primary: "#f87171", secondary: "#0a0a1a" },
+              iconTheme: { primary: '#f87171', secondary: '#0a0a1a' },
             },
           }}
         />

@@ -1,27 +1,23 @@
-"use client";
+'use client';
 
-import { useEffect, useState, use } from "react";
-import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
-import DashboardLayout from "@/components/items/DashboardLayout";
-import GlassCard from "@/components/bits/GlassCard";
-import Input from "@/components/bits/Input";
-import Textarea from "@/components/bits/Textarea";
-import Select, { RISK_OPTIONS } from "@/components/bits/Select";
-import Button from "@/components/bits/Button";
-import BackLink from "@/components/bits/BackLink";
-import { PageSpinner } from "@/components/bits/Spinner";
+import { useEffect, useState, use } from 'react';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+import DashboardLayout from '@/components/items/DashboardLayout';
+import GlassCard from '@/components/bits/GlassCard';
+import Input from '@/components/bits/Input';
+import Textarea from '@/components/bits/Textarea';
+import Select, { RISK_OPTIONS } from '@/components/bits/Select';
+import Button from '@/components/bits/Button';
+import BackLink from '@/components/bits/BackLink';
+import { PageSpinner } from '@/components/bits/Spinner';
 
-export default function EditHoldingPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default function EditHoldingPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [risk, setRisk] = useState("high");
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [risk, setRisk] = useState('high');
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
 
@@ -29,14 +25,14 @@ export default function EditHoldingPage({
     const fetchHolding = async () => {
       try {
         const res = await fetch(`/api/holdings/${id}`);
-        if (!res.ok) throw new Error("Failed to fetch holding");
+        if (!res.ok) throw new Error('Failed to fetch holding');
         const data = await res.json();
         setName(data.name);
-        setDescription(data.description || "");
-        setRisk(data.risk || "high");
+        setDescription(data.description || '');
+        setRisk(data.risk || 'high');
       } catch {
-        toast.error("Failed to load holding");
-        router.push("/holdings");
+        toast.error('Failed to load holding');
+        router.push('/holdings');
       } finally {
         setFetching(false);
       }
@@ -50,22 +46,22 @@ export default function EditHoldingPage({
 
     try {
       const res = await fetch(`/api/holdings/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, description, risk }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        toast.error(data.error || "Failed to update holding");
+        toast.error(data.error || 'Failed to update holding');
         return;
       }
 
-      toast.success("Holding updated successfully");
-      router.push("/holdings");
+      toast.success('Holding updated successfully');
+      router.push('/holdings');
     } catch {
-      toast.error("An unexpected error occurred");
+      toast.error('An unexpected error occurred');
     } finally {
       setLoading(false);
     }

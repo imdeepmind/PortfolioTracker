@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 import {
   Area,
   AreaChart,
@@ -9,10 +9,10 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-  Legend
-} from "recharts";
-import GlassCard from "@/components/bits/GlassCard";
-import { formatCurrency } from "@/lib/constants";
+  Legend,
+} from 'recharts';
+import GlassCard from '@/components/bits/GlassCard';
+import { formatCurrency } from '@/lib/constants';
 
 interface DataPoint {
   month: string;
@@ -43,49 +43,52 @@ export default function PortfolioOverviewChart({ data }: PortfolioOverviewChartP
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-            <XAxis 
-              dataKey="month" 
-              stroke="rgba(255,255,255,0.4)" 
+            <XAxis
+              dataKey="month"
+              stroke="rgba(255,255,255,0.4)"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 12, fill: "#fff" }}
+              tick={{ fontSize: 12, fill: '#fff' }}
               dy={10}
             />
-            <YAxis 
+            <YAxis
               yAxisId="left"
-              stroke="rgba(255,255,255,0.4)" 
+              stroke="rgba(255,255,255,0.4)"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 12, fill: "#fff" }}
+              tick={{ fontSize: 12, fill: '#fff' }}
               tickFormatter={formatCurrency}
               width={120}
             />
-            <YAxis 
-              yAxisId="right" 
-              orientation="right" 
-              stroke="rgba(255,255,255,0.4)" 
+            <YAxis
+              yAxisId="right"
+              orientation="right"
+              stroke="rgba(255,255,255,0.4)"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 12, fill: "#fff" }}
+              tick={{ fontSize: 12, fill: '#fff' }}
               tickFormatter={formatCurrency}
               width={80}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "rgba(17, 17, 48, 0.9)",
-                borderColor: "rgba(255, 255, 255, 0.1)",
-                borderRadius: "12px",
-                color: "#fff",
-                backdropFilter: "blur(8px)",
+                backgroundColor: 'rgba(17, 17, 48, 0.9)',
+                borderColor: 'rgba(255, 255, 255, 0.1)',
+                borderRadius: '12px',
+                color: '#fff',
+                backdropFilter: 'blur(8px)',
               }}
-              itemStyle={{ color: "#e2e8f0" }}
-              formatter={(value: any, name: any) => [`₹${value.toLocaleString()}`, name]}
+              itemStyle={{ color: '#e2e8f0' }}
+              formatter={(value: number | string | undefined, name: string | undefined) => [
+                `₹${Number(value || 0).toLocaleString()}`,
+                name || '',
+              ]}
             />
-            <Legend 
-              verticalAlign="bottom" 
+            <Legend
+              verticalAlign="bottom"
               height={36}
               iconType="circle"
-              wrapperStyle={{ fontSize: "12px", paddingTop: "20px" }}
+              wrapperStyle={{ fontSize: '12px', paddingTop: '20px' }}
             />
             <Area
               yAxisId="left"

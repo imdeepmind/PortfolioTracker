@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface PageHeaderProps {
   title: string;
@@ -7,12 +7,7 @@ interface PageHeaderProps {
   action?: React.ReactNode;
 }
 
-export default function PageHeader({
-  title,
-  titleSuffix,
-  subtitle,
-  action,
-}: PageHeaderProps) {
+export default function PageHeader({ title, titleSuffix, subtitle, action }: PageHeaderProps) {
   return (
     <div className="flex items-center justify-between mb-8">
       <div>

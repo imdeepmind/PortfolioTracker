@@ -1,27 +1,18 @@
-import React from "react";
+import React from 'react';
 
-interface TextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label: string;
   helperText?: string;
   required?: boolean;
 }
 
-export default function Textarea({
-  label,
-  helperText,
-  required,
-  id,
-  ...rest
-}: TextareaProps) {
+export default function Textarea({ label, helperText, required, id, ...rest }: TextareaProps) {
   return (
     <div>
       <label htmlFor={id} className="block text-sm font-medium text-gray-300 mb-2">
         {label} {required && <span className="text-red-400">*</span>}
       </label>
-      {helperText && (
-        <p className="text-xs text-gray-500 mb-2">{helperText}</p>
-      )}
+      {helperText && <p className="text-xs text-gray-500 mb-2">{helperText}</p>}
       <textarea
         id={id}
         required={required}

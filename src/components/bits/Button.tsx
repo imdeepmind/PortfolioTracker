@@ -1,9 +1,9 @@
-import React from "react";
-import Link from "next/link";
-import Spinner from "./Spinner";
+import React from 'react';
+import Link from 'next/link';
+import Spinner from './Spinner';
 
-type ButtonVariant = "primary" | "secondary" | "danger" | "ghost";
-type ButtonSize = "sm" | "md" | "lg";
+type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost';
+type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface ButtonBaseProps {
   variant?: ButtonVariant;
@@ -16,7 +16,8 @@ interface ButtonBaseProps {
 }
 
 interface ButtonAsButton
-  extends ButtonBaseProps,
+  extends
+    ButtonBaseProps,
     Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, keyof ButtonBaseProps> {
   href?: never;
 }
@@ -29,28 +30,27 @@ type ButtonProps = ButtonAsButton | ButtonAsLink;
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40",
+    'bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40',
   secondary:
-    "bg-white/[0.06] border border-white/[0.1] text-gray-300 hover:text-white hover:bg-white/[0.1]",
+    'bg-white/[0.06] border border-white/[0.1] text-gray-300 hover:text-white hover:bg-white/[0.1]',
   danger:
-    "bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-500/25 hover:shadow-red-500/40",
-  ghost:
-    "text-gray-400 hover:text-white hover:bg-white/[0.06]",
+    'bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-500/25 hover:shadow-red-500/40',
+  ghost: 'text-gray-400 hover:text-white hover:bg-white/[0.06]',
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: "px-3 py-1.5 text-xs",
-  md: "px-5 py-2.5 text-sm",
-  lg: "px-6 py-3 text-base",
+  sm: 'px-3 py-1.5 text-xs',
+  md: 'px-5 py-2.5 text-sm',
+  lg: 'px-6 py-3 text-base',
 };
 
 export default function Button({
-  variant = "primary",
-  size = "md",
+  variant = 'primary',
+  size = 'md',
   loading = false,
   loadingText,
   icon,
-  className = "",
+  className = '',
   children,
   href,
   ...rest
