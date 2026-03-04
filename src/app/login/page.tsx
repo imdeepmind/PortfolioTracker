@@ -1,28 +1,28 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import GlassCard from "@/components/bits/GlassCard";
-import Input from "@/components/bits/Input";
-import Button from "@/components/bits/Button";
-import ErrorAlert from "@/components/bits/ErrorAlert";
+import { useState } from 'react';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import GlassCard from '@/components/bits/GlassCard';
+import Input from '@/components/bits/Input';
+import Button from '@/components/bits/Button';
+import ErrorAlert from '@/components/bits/ErrorAlert';
 
 export default function LoginPage() {
   const router = useRouter();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
     setLoading(true);
 
     try {
-      const result = await signIn("credentials", {
+      const result = await signIn('credentials', {
         username,
         password,
         redirect: false,
@@ -31,11 +31,11 @@ export default function LoginPage() {
       if (result?.error) {
         setError(result.error);
       } else {
-        router.push("/");
+        router.push('/');
         router.refresh();
       }
     } catch {
-      setError("An unexpected error occurred");
+      setError('An unexpected error occurred');
     } finally {
       setLoading(false);
     }
@@ -49,8 +49,18 @@ export default function LoginPage() {
       <div className="w-full max-w-md relative">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-500/20 border border-indigo-500/30 mb-4">
-            <svg className="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+            <svg
+              className="w-8 h-8 text-indigo-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+              />
             </svg>
           </div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
@@ -96,8 +106,11 @@ export default function LoginPage() {
 
           <div className="mt-6 text-center">
             <p className="text-gray-400 text-sm">
-              Don&apos;t have an account?{" "}
-              <Link href="/register" className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
+              Don&apos;t have an account?{' '}
+              <Link
+                href="/register"
+                className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors"
+              >
                 Create one
               </Link>
             </p>

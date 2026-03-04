@@ -1,22 +1,19 @@
-import React from "react";
+import React from 'react';
 
 interface SpinnerProps {
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
   className?: string;
 }
 
 const sizeMap = {
-  sm: "w-4 h-4",
-  md: "w-5 h-5",
-  lg: "w-6 h-6",
+  sm: 'w-4 h-4',
+  md: 'w-5 h-5',
+  lg: 'w-6 h-6',
 };
 
-export default function Spinner({ size = "md", className = "" }: SpinnerProps) {
+export default function Spinner({ size = 'md', className = '' }: SpinnerProps) {
   return (
-    <svg
-      className={`animate-spin ${sizeMap[size]} ${className}`}
-      viewBox="0 0 24 24"
-    >
+    <svg className={`animate-spin ${sizeMap[size]} ${className}`} viewBox="0 0 24 24">
       <circle
         className="opacity-25"
         cx="12"
@@ -35,7 +32,7 @@ export default function Spinner({ size = "md", className = "" }: SpinnerProps) {
   );
 }
 
-export function PageSpinner({ text = "Loading..." }: { text?: string }) {
+export function PageSpinner({ text = 'Loading...' }: { text?: string }) {
   return (
     <div className="flex items-center justify-center py-20">
       <div className="flex items-center gap-3 text-gray-400">

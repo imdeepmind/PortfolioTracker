@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 import {
   Area,
   AreaChart,
@@ -9,10 +9,10 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-  Legend
-} from "recharts";
-import GlassCard from "@/components/bits/GlassCard";
-import { formatCurrency } from "@/lib/constants";
+  Legend,
+} from 'recharts';
+import GlassCard from '@/components/bits/GlassCard';
+import { formatCurrency } from '@/lib/constants';
 
 interface HoldingDataPoint {
   month: string;
@@ -44,7 +44,13 @@ export default function HoldingDetailChart({ holdingName, data }: HoldingDetailC
                 <stop offset="5%" stopColor="#34d399" stopOpacity={0.3} />
                 <stop offset="95%" stopColor="#34d399" stopOpacity={0} />
               </linearGradient>
-              <linearGradient id={`colorHoldingMonthly-${sanitizedName}`} x1="0" y1="0" x2="0" y2="1">
+              <linearGradient
+                id={`colorHoldingMonthly-${sanitizedName}`}
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1"
+              >
                 <stop offset="5%" stopColor="#f87171" stopOpacity={0.3} />
                 <stop offset="95%" stopColor="#f87171" stopOpacity={0} />
               </linearGradient>
@@ -55,7 +61,7 @@ export default function HoldingDetailChart({ holdingName, data }: HoldingDetailC
               stroke="rgba(255,255,255,0.4)"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 10, fill: "#fff" }}
+              tick={{ fontSize: 10, fill: '#fff' }}
               dy={10}
             />
             <YAxis
@@ -63,7 +69,7 @@ export default function HoldingDetailChart({ holdingName, data }: HoldingDetailC
               stroke="rgba(255,255,255,0.4)"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 10, fill: "#fff" }}
+              tick={{ fontSize: 10, fill: '#fff' }}
               tickFormatter={formatCurrency}
               width={60}
               domain={[0, 'auto']}
@@ -74,27 +80,30 @@ export default function HoldingDetailChart({ holdingName, data }: HoldingDetailC
               stroke="rgba(255,255,255,0.4)"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 10, fill: "#fff" }}
+              tick={{ fontSize: 10, fill: '#fff' }}
               tickFormatter={formatCurrency}
               width={60}
               domain={[0, 'auto']}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "rgba(17, 17, 48, 0.9)",
-                borderColor: "rgba(255, 255, 255, 0.1)",
-                borderRadius: "12px",
-                color: "#fff",
-                backdropFilter: "blur(8px)"
+                backgroundColor: 'rgba(17, 17, 48, 0.9)',
+                borderColor: 'rgba(255, 255, 255, 0.1)',
+                borderRadius: '12px',
+                color: '#fff',
+                backdropFilter: 'blur(8px)',
               }}
-              itemStyle={{ color: "#e2e8f0" }}
-              formatter={(value: any, name: any) => [formatCurrency(Number(value)), name]}
+              itemStyle={{ color: '#e2e8f0' }}
+              formatter={(value: number | string | undefined, name: string | undefined) => [
+                formatCurrency(Number(value || 0)),
+                name || '',
+              ]}
             />
             <Legend
               verticalAlign="bottom"
               height={36}
               iconType="circle"
-              wrapperStyle={{ fontSize: "12px", paddingTop: "20px" }}
+              wrapperStyle={{ fontSize: '12px', paddingTop: '20px' }}
             />
             <Area
               yAxisId="left"

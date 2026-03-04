@@ -1,15 +1,8 @@
-"use client";
+'use client';
 
-import React from "react";
-import {
-  Cell,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-  Legend,
-} from "recharts";
-import GlassCard from "@/components/bits/GlassCard";
+import React from 'react';
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import GlassCard from '@/components/bits/GlassCard';
 
 interface HoldingData {
   name: string;
@@ -20,9 +13,11 @@ interface HoldingsRiskDistributionChartProps {
   data: HoldingData[];
 }
 
-const COLORS = ["#f87171", "#fbbf24", "#34d399"];
+const COLORS = ['#f87171', '#fbbf24', '#34d399'];
 
-export default function HoldingsRiskDistributionChart({ data }: HoldingsRiskDistributionChartProps) {
+export default function HoldingsRiskDistributionChart({
+  data,
+}: HoldingsRiskDistributionChartProps) {
   return (
     <GlassCard padding="md" className="w-full h-full flex flex-col">
       <h3 className="text-lg font-semibold text-white mb-4">Holdings Risk Distribution</h3>
@@ -46,20 +41,23 @@ export default function HoldingsRiskDistributionChart({ data }: HoldingsRiskDist
             </Pie>
             <Tooltip
               contentStyle={{
-                backgroundColor: "rgba(17, 17, 48, 0.9)",
-                borderColor: "rgba(255, 255, 255, 0.1)",
-                borderRadius: "12px",
-                color: "#fff",
-                backdropFilter: "blur(8px)",
+                backgroundColor: 'rgba(17, 17, 48, 0.9)',
+                borderColor: 'rgba(255, 255, 255, 0.1)',
+                borderRadius: '12px',
+                color: '#fff',
+                backdropFilter: 'blur(8px)',
               }}
-              itemStyle={{ color: "#e2e8f0" }}
-              formatter={(value: any) => [`${value}%`, "Share"]}
+              itemStyle={{ color: '#e2e8f0' }}
+              formatter={(value: number | string | undefined, name: string | undefined) => [
+                `${value || 0}%`,
+                name || 'Share',
+              ]}
             />
-            <Legend 
-              verticalAlign="bottom" 
+            <Legend
+              verticalAlign="bottom"
               height={36}
               iconType="circle"
-              wrapperStyle={{ fontSize: "12px", paddingTop: "20px" }}
+              wrapperStyle={{ fontSize: '12px', paddingTop: '20px' }}
             />
           </PieChart>
         </ResponsiveContainer>

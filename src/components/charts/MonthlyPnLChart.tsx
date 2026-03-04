@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 import {
   Bar,
   ComposedChart,
@@ -10,10 +10,10 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-  Cell
-} from "recharts";
-import GlassCard from "@/components/bits/GlassCard";
-import { formatCurrency } from "@/lib/constants";
+  Cell,
+} from 'recharts';
+import GlassCard from '@/components/bits/GlassCard';
+import { formatCurrency } from '@/lib/constants';
 
 interface PnLDataPoint {
   month: string;
@@ -38,7 +38,7 @@ export default function MonthlyPnLChart({ data }: MonthlyPnLChartProps) {
               stroke="rgba(255,255,255,0.4)"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 12, fill: "#fff" }}
+              tick={{ fontSize: 12, fill: '#fff' }}
               dy={10}
             />
             <YAxis
@@ -46,7 +46,7 @@ export default function MonthlyPnLChart({ data }: MonthlyPnLChartProps) {
               stroke="rgba(255,255,255,0.4)"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 12, fill: "#fff" }}
+              tick={{ fontSize: 12, fill: '#fff' }}
               tickFormatter={formatCurrency}
               width={100}
               domain={([dataMin, dataMax]) => {
@@ -60,7 +60,7 @@ export default function MonthlyPnLChart({ data }: MonthlyPnLChartProps) {
               stroke="rgba(255,255,255,0.4)"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 12, fill: "#fff" }}
+              tick={{ fontSize: 12, fill: '#fff' }}
               tickFormatter={(value) => `${value}%`}
               width={60}
               domain={([dataMin, dataMax]) => {
@@ -71,22 +71,25 @@ export default function MonthlyPnLChart({ data }: MonthlyPnLChartProps) {
             <Tooltip
               cursor={false}
               contentStyle={{
-                backgroundColor: "rgba(17, 17, 48, 0.9)",
-                borderColor: "rgba(255, 255, 255, 0.1)",
-                borderRadius: "12px",
-                color: "#fff",
-                backdropFilter: "blur(8px)",
+                backgroundColor: 'rgba(17, 17, 48, 0.9)',
+                borderColor: 'rgba(255, 255, 255, 0.1)',
+                borderRadius: '12px',
+                color: '#fff',
+                backdropFilter: 'blur(8px)',
               }}
-              itemStyle={{ color: "#e2e8f0" }}
-              formatter={(value: any, name: any) => {
-                if (name === "pnlPercent") return [`${value}%`, "P&L %"];
-                if (typeof value === "number") return [formatCurrency(value), "P&L"];
-                return [value, "P&L"];
+              itemStyle={{ color: '#e2e8f0' }}
+              formatter={(value: number | string | undefined, name: string | undefined) => {
+                if (name === 'pnlPercent') return [`${value || 0}%`, 'P&L %'];
+                return [formatCurrency(Number(value || 0)), 'P&L'];
               }}
             />
             <Bar yAxisId="left" dataKey="pnl" name="pnl" radius={[4, 4, 4, 4]}>
               {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.pnl >= 0 ? '#34d399' : '#f87171'} fillOpacity={0.8} />
+                <Cell
+                  key={`cell-${index}`}
+                  fill={entry.pnl >= 0 ? '#34d399' : '#f87171'}
+                  fillOpacity={0.8}
+                />
               ))}
             </Bar>
             <Line

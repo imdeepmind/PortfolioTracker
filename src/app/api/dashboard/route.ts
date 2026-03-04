@@ -1,27 +1,25 @@
-import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import dbConnect from "@/lib/mongodb";
-import Transaction from "@/models/Transaction";
-import mongoose from "mongoose";
+import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import dbConnect from '@/lib/mongodb';
+import Transaction from '@/models/Transaction';
+import mongoose from 'mongoose';
 
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const userId = new mongoose.Types.ObjectId(
-      (session.user as { id: string }).id
-    );
+    const userId = new mongoose.Types.ObjectId((session.user as { id: string }).id);
 
     await dbConnect();
 
     const now = new Date();
-    const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
     const sixMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 6, 1);
-    const sixMonthsAgoKey = `${sixMonthsAgo.getFullYear()}-${String(sixMonthsAgo.getMonth() + 1).padStart(2, "0")}`;
+    const sixMonthsAgoKey = `${sixMonthsAgo.getFullYear()}-${String(sixMonthsAgo.getMonth() + 1).padStart(2, '0')}`;
 
     // --- Single Aggregation Pipeline ---
     // 1. Group by month and holding to get the last snapshot of each holding per month
@@ -33,70 +31,101 @@ export async function GET() {
       {
         $group: {
           _id: {
-            month: { $dateToString: { format: "%Y-%m", date: { $toDate: "$dateTime" } } },
-            holding: "$holding"
+            month: { $dateToString: { format: '%Y-%m', date: { $toDate: '$dateTime' } } },
+            holding: '$holding',
           },
-          lastPortfolio: { $last: "$totalPortfolioSize" },
-          lastInvested: { $last: "$totalAmountInvested" },
-          monthlyAmount: { $sum: "$amount" }
-        }
+          lastPortfolio: { $last: '$totalPortfolioSize' },
+          lastInvested: { $last: '$totalAmountInvested' },
+          monthlyAmount: { $sum: '$amount' },
+        },
       },
       {
         $lookup: {
-          from: "holdings",
-          localField: "_id.holding",
-          foreignField: "_id",
-          as: "holdingDetails"
-        }
+          from: 'holdings',
+          localField: '_id.holding',
+          foreignField: '_id',
+          as: 'holdingDetails',
+        },
       },
-      { $unwind: "$holdingDetails" },
+      { $unwind: '$holdingDetails' },
       {
         $group: {
-          _id: "$_id.month",
+          _id: '$_id.month',
           holdings: {
             $push: {
-              holdingId: "$_id.holding",
-              name: "$holdingDetails.name",
-              risk: { $ifNull: ["$holdingDetails.risk", "high"] },
-              portfolioSize: "$lastPortfolio",
-              amountInvested: "$lastInvested",
-              monthlyInvestment: "$monthlyAmount",
-              profit: { $subtract: ["$lastPortfolio", "$lastInvested"] }
-            }
+              holdingId: '$_id.holding',
+              name: '$holdingDetails.name',
+              risk: { $ifNull: ['$holdingDetails.risk', 'high'] },
+              portfolioSize: '$lastPortfolio',
+              amountInvested: '$lastInvested',
+              monthlyInvestment: '$monthlyAmount',
+              profit: { $subtract: ['$lastPortfolio', '$lastInvested'] },
+            },
           },
-          totalMonthlyInvestment: { $sum: "$monthlyAmount" }
-        }
+          totalMonthlyInvestment: { $sum: '$monthlyAmount' },
+        },
       },
-      { $sort: { _id: 1 as const } }
+      { $sort: { _id: 1 as const } },
     ]);
 
     // --- Post-processing for accurate carry-over and overall totals ---
-    const monthlyStats: any[] = [];
-    const latestStates: Record<string, { portfolioSize: number, amountInvested: number, name: string, risk: string }> = {};
+    interface HoldingSnapshot {
+      holdingId: string;
+      name: string;
+      risk: string;
+      portfolioSize: number;
+      amountInvested: number;
+      monthlyInvestment: number;
+      profit: number;
+    }
+
+    interface MonthlyStat {
+      month: string;
+      totalPortfolioSize: number;
+      totalAmountInvested: number;
+      totalProfit: number;
+      totalMonthlyInvestment: number;
+      holdings: HoldingSnapshot[];
+    }
+
+    const monthlyStats: MonthlyStat[] = [];
+    const latestStates: Record<
+      string,
+      { portfolioSize: number; amountInvested: number; name: string; risk: string }
+    > = {};
 
     for (const monthData of aggregatedData) {
       const monthKey = monthData._id;
-      
+
       // Update latest states for holdings that had transactions this month
-      monthData.holdings.forEach((h: any) => {
-        latestStates[h.holdingId.toString()] = {
-          name: h.name,
-          risk: h.risk,
-          portfolioSize: h.portfolioSize,
-          amountInvested: h.amountInvested
-        };
-      });
+      monthData.holdings.forEach(
+        (h: {
+          holdingId: string;
+          name: string;
+          risk: string;
+          portfolioSize: number;
+          amountInvested: number;
+          monthlyInvestment: number;
+        }) => {
+          latestStates[h.holdingId.toString()] = {
+            name: h.name,
+            risk: h.risk,
+            portfolioSize: h.portfolioSize,
+            amountInvested: h.amountInvested,
+          };
+        }
+      );
 
       // Map monthly investments from current month's transactions
       const monthlyInvestmentsMap: Record<string, number> = {};
-      monthData.holdings.forEach((h: any) => {
+      monthData.holdings.forEach((h: { holdingId: string; monthlyInvestment: number }) => {
         monthlyInvestmentsMap[h.holdingId.toString()] = h.monthlyInvestment;
       });
 
       // Calculate overall cumulative totals at the end of this month
       let totalPortfolioSize = 0;
       let totalAmountInvested = 0;
-      const allHoldingsSnapshot: any[] = [];
+      const allHoldingsSnapshot: HoldingSnapshot[] = [];
 
       Object.entries(latestStates).forEach(([id, state]) => {
         totalPortfolioSize += state.portfolioSize;
@@ -105,7 +134,7 @@ export async function GET() {
           holdingId: id,
           ...state,
           monthlyInvestment: monthlyInvestmentsMap[id] || 0,
-          profit: state.portfolioSize - state.amountInvested
+          profit: state.portfolioSize - state.amountInvested,
         });
       });
 
@@ -115,15 +144,15 @@ export async function GET() {
         totalAmountInvested,
         totalProfit: totalPortfolioSize - totalAmountInvested,
         totalMonthlyInvestment: monthData.totalMonthlyInvestment,
-        holdings: allHoldingsSnapshot
+        holdings: allHoldingsSnapshot,
       });
     }
 
     // --- Derive dashboard overall statistics ---
-    const lastMonth = monthlyStats[monthlyStats.length - 1] || { 
-      totalAmountInvested: 0, 
-      totalPortfolioSize: 0, 
-      totalProfit: 0 
+    const lastMonth = monthlyStats[monthlyStats.length - 1] || {
+      totalAmountInvested: 0,
+      totalPortfolioSize: 0,
+      totalProfit: 0,
     };
 
     const totalAmountInvested = lastMonth.totalAmountInvested;
@@ -131,17 +160,19 @@ export async function GET() {
     const totalProfit = totalPortfolioSize - totalAmountInvested;
 
     // Current month investment
-    const currentMonthEntry = monthlyStats.find(m => m.month === currentMonthKey);
+    const currentMonthEntry = monthlyStats.find((m) => m.month === currentMonthKey);
     const totalInvestmentCurrentMonth = currentMonthEntry?.totalMonthlyInvestment || 0;
 
     // Current month profit
-    const currentMonthIndex = monthlyStats.findIndex(m => m.month === currentMonthKey);
-    const previousMonthProfit = currentMonthIndex > 0 ? monthlyStats[currentMonthIndex - 1].totalProfit : 0;
+    const currentMonthIndex = monthlyStats.findIndex((m) => m.month === currentMonthKey);
+    const previousMonthProfit =
+      currentMonthIndex > 0 ? monthlyStats[currentMonthIndex - 1].totalProfit : 0;
     const currentMonthProfit = totalProfit - previousMonthProfit;
 
     // Profit in last 6 months
-    const sixMonthsAgoIndex = monthlyStats.findIndex(m => m.month >= sixMonthsAgoKey);
-    const profitBeforeSixMonths = sixMonthsAgoIndex > 0 ? monthlyStats[sixMonthsAgoIndex - 1].totalProfit : 0;
+    const sixMonthsAgoIndex = monthlyStats.findIndex((m) => m.month >= sixMonthsAgoKey);
+    const profitBeforeSixMonths =
+      sixMonthsAgoIndex > 0 ? monthlyStats[sixMonthsAgoIndex - 1].totalProfit : 0;
     const profitLastSixMonths = totalProfit - profitBeforeSixMonths;
 
     // Total profitable months (where cumulative profit increased)
@@ -166,13 +197,10 @@ export async function GET() {
       totalProfitableMonths,
       totalMonths: monthlyStats.length,
       monthlyTargetReturn,
-      monthlyData: monthlyStats // Include new detailed data for charts
+      monthlyData: monthlyStats, // Include new detailed data for charts
     });
   } catch (error) {
-    console.error("Dashboard API error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    console.error('Dashboard API error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
