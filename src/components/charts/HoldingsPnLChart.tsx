@@ -53,7 +53,7 @@ export default function HoldingsPnLChart({ data }: HoldingsPnLChartProps) {
               axisLine={false}
               tickLine={false}
               tick={{ fontSize: 12, fill: '#fff' }}
-              width={250}
+              width={300}
               interval={0}
             />
             <Tooltip

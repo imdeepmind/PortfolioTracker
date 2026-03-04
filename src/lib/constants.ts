@@ -11,6 +11,13 @@ export const formatCurrency = (amount: number): string =>
     minimumFractionDigits: 2,
   }).format(amount);
 
+export const formatCompactCurrency = (amount: number): string =>
+  new Intl.NumberFormat(CURRENCY.locale, {
+    style: 'currency',
+    currency: CURRENCY.code,
+    notation: 'compact',
+  }).format(amount);
+
 export const formatDate = (date: string): string =>
   new Date(date).toLocaleDateString(CURRENCY.locale, {
     year: 'numeric',
