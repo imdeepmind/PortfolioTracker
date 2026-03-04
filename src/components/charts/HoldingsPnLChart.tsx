@@ -53,7 +53,7 @@ export default function HoldingsPnLChart({ data }: HoldingsPnLChartProps) {
               axisLine={false}
               tickLine={false}
               tick={{ fontSize: 12, fill: '#fff' }}
-              width={250}
+              width={300}
               interval={0}
             />
             <Tooltip
@@ -71,7 +71,7 @@ export default function HoldingsPnLChart({ data }: HoldingsPnLChartProps) {
                 name || 'Return',
               ]}
             />
-            <Bar dataKey="pnlPercent" radius={[0, 4, 4, 0]}>
+            <Bar dataKey="pnlPercent" name="P&L %" radius={[0, 4, 4, 0]}>
               {data.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}

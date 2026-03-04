@@ -13,7 +13,7 @@ import {
   Cell,
 } from 'recharts';
 import GlassCard from '@/components/bits/GlassCard';
-import { formatCurrency } from '@/lib/constants';
+import { formatCurrency, formatCurrencyNoDecimal } from '@/lib/constants';
 
 interface PnLDataPoint {
   month: string;
@@ -47,8 +47,7 @@ export default function MonthlyPnLChart({ data }: MonthlyPnLChartProps) {
               axisLine={false}
               tickLine={false}
               tick={{ fontSize: 12, fill: '#fff' }}
-              tickFormatter={formatCurrency}
-              width={100}
+              tickFormatter={formatCurrencyNoDecimal}
               domain={([dataMin, dataMax]) => {
                 const max = Math.max(Math.abs(dataMin), Math.abs(dataMax));
                 return [-max, max];
@@ -62,7 +61,6 @@ export default function MonthlyPnLChart({ data }: MonthlyPnLChartProps) {
               tickLine={false}
               tick={{ fontSize: 12, fill: '#fff' }}
               tickFormatter={(value) => `${value}%`}
-              width={60}
               domain={([dataMin, dataMax]) => {
                 const max = Math.max(Math.abs(dataMin), Math.abs(dataMax));
                 return [-max, max];
