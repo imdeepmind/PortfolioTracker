@@ -1,6 +1,25 @@
 version: '3.9'
 
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: portfolio-app
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    environment:
+      - MONGODB_URI=mongodb://admin:admin123@mongo:27017/portfolio?authSource=admin
+      - NEXTAUTH_SECRET=development_secret_only
+      - NEXTAUTH_URL=http://localhost:3000
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - mongo
+
   mongo:
     image: mongo:7
     container_name: portfolio-mongo
