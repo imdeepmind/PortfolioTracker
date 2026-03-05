@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import React from "react";
-import Link from "next/link";
-import GlassCard from "@/components/bits/GlassCard";
-import { formatCurrency, formatDate } from "@/lib/constants";
+import React from 'react';
+import Link from 'next/link';
+import GlassCard from '@/components/bits/GlassCard';
+import { formatCurrency, formatDate } from '@/lib/constants';
 
-type RiskLevel = "low" | "medium" | "high";
+type RiskLevel = 'low' | 'medium' | 'high';
 
 const riskConfig: Record<RiskLevel, { label: string; color: string; bg: string }> = {
-  low: { label: "Low", color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/20" },
-  medium: { label: "Medium", color: "text-amber-400", bg: "bg-amber-500/10 border-amber-500/20" },
-  high: { label: "High", color: "text-red-400", bg: "bg-red-500/10 border-red-500/20" },
+  low: { label: 'Low', color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20' },
+  medium: { label: 'Medium', color: 'text-amber-400', bg: 'bg-amber-500/10 border-amber-500/20' },
+  high: { label: 'High', color: 'text-red-400', bg: 'bg-red-500/10 border-red-500/20' },
 };
 
 interface HoldingCardProps {
@@ -28,24 +28,28 @@ export default function HoldingCard({
   id,
   name,
   description,
-  risk = "high",
+  risk = 'high',
   createdAt,
   totalAmountInvested,
   totalPortfolioSize,
   onDelete,
 }: HoldingCardProps) {
   const profit = totalPortfolioSize - totalAmountInvested;
-  const profitPercent =
-    totalAmountInvested !== 0 ? (profit / totalAmountInvested) * 100 : 0;
+  const profitPercent = totalAmountInvested !== 0 ? (profit / totalAmountInvested) * 100 : 0;
   const isPositive = profit >= 0;
   const hasData = totalAmountInvested !== 0 || totalPortfolioSize !== 0;
   const riskInfo = riskConfig[risk] || riskConfig.high;
 
   return (
-    <GlassCard padding="md" className="hover:bg-white/[0.06] transition-all duration-200 group flex flex-col">
+    <GlassCard
+      padding="md"
+      className="hover:bg-white/[0.06] transition-all duration-200 group flex flex-col"
+    >
       {/* Top row: risk badge + action buttons */}
       <div className="flex items-center justify-between mb-3">
-        <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider border ${riskInfo.bg} ${riskInfo.color}`}>
+        <span
+          className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider border ${riskInfo.bg} ${riskInfo.color}`}
+        >
           {riskInfo.label}
         </span>
         <div className="flex items-center gap-1">
@@ -55,7 +59,12 @@ export default function HoldingCard({
             title="Transactions"
           >
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"
+              />
             </svg>
           </Link>
           <Link
@@ -64,7 +73,12 @@ export default function HoldingCard({
             title="Edit"
           >
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+              />
             </svg>
           </Link>
           <button
@@ -73,7 +87,12 @@ export default function HoldingCard({
             title="Delete"
           >
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
             </svg>
           </button>
         </div>
@@ -86,9 +105,7 @@ export default function HoldingCard({
             {name}
           </h3>
         </Link>
-        {description && (
-          <p className="text-gray-500 text-xs mt-1 line-clamp-1">{description}</p>
-        )}
+        {description && <p className="text-gray-500 text-xs mt-1 line-clamp-1">{description}</p>}
       </div>
 
       {/* Financial stats */}
@@ -97,20 +114,23 @@ export default function HoldingCard({
           <div>
             <p className="text-[10px] uppercase tracking-wider text-gray-500 mb-1">Invested</p>
             <p className="text-sm font-medium text-gray-300">
-              {hasData ? formatCurrency(totalAmountInvested) : "—"}
+              {hasData ? formatCurrency(totalAmountInvested) : '—'}
             </p>
           </div>
           <div>
             <p className="text-[10px] uppercase tracking-wider text-gray-500 mb-1">Value</p>
             <p className="text-sm font-medium text-gray-300">
-              {hasData ? formatCurrency(totalPortfolioSize) : "—"}
+              {hasData ? formatCurrency(totalPortfolioSize) : '—'}
             </p>
           </div>
           <div>
             <p className="text-[10px] uppercase tracking-wider text-gray-500 mb-1">Profit</p>
             {hasData ? (
-              <p className={`text-sm font-semibold ${isPositive ? "text-emerald-400" : "text-red-400"}`}>
-                {isPositive ? "+" : ""}{profitPercent.toFixed(1)}%
+              <p
+                className={`text-sm font-semibold ${isPositive ? 'text-emerald-400' : 'text-red-400'}`}
+              >
+                {isPositive ? '+' : ''}
+                {profitPercent.toFixed(1)}%
               </p>
             ) : (
               <p className="text-sm font-medium text-gray-300">—</p>

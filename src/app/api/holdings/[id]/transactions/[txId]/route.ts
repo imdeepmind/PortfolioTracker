@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import dbConnect from "@/lib/mongodb";
-import Transaction from "@/models/Transaction";
-import Holding from "@/models/Holding";
+import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import dbConnect from '@/lib/mongodb';
+import Transaction from '@/models/Transaction';
+import Holding from '@/models/Holding';
 
 // GET single transaction
 export async function GET(
@@ -13,7 +13,7 @@ export async function GET(
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { id: holdingId, txId } = await params;
@@ -23,7 +23,7 @@ export async function GET(
 
     const holding = await Holding.findOne({ _id: holdingId, user: userId });
     if (!holding) {
-      return NextResponse.json({ error: "Holding not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Holding not found' }, { status: 404 });
     }
 
     const transaction = await Transaction.findOne({
@@ -33,19 +33,13 @@ export async function GET(
     });
 
     if (!transaction) {
-      return NextResponse.json(
-        { error: "Transaction not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Transaction not found' }, { status: 404 });
     }
 
     return NextResponse.json(transaction);
   } catch (error) {
-    console.error("Get transaction error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    console.error('Get transaction error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -57,7 +51,7 @@ export async function PUT(
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { id: holdingId, txId } = await params;
@@ -68,7 +62,7 @@ export async function PUT(
 
     const holding = await Holding.findOne({ _id: holdingId, user: userId });
     if (!holding) {
-      return NextResponse.json({ error: "Holding not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Holding not found' }, { status: 404 });
     }
 
     const currentTx = await Transaction.findOne({
@@ -78,10 +72,7 @@ export async function PUT(
     });
 
     if (!currentTx) {
-      return NextResponse.json(
-        { error: "Transaction not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Transaction not found' }, { status: 404 });
     }
 
     const newDateTime = dateTime ? new Date(dateTime) : currentTx.dateTime;
@@ -94,9 +85,7 @@ export async function PUT(
       _id: { $ne: txId },
     }).sort({ dateTime: -1 });
 
-    const previousTotal = prevTransaction
-      ? prevTransaction.totalAmountInvested
-      : 0;
+    const previousTotal = prevTransaction ? prevTransaction.totalAmountInvested : 0;
     const newAmount = amount !== undefined ? Number(amount) : currentTx.amount;
     const totalAmountInvested = previousTotal + newAmount;
 
@@ -116,11 +105,8 @@ export async function PUT(
 
     return NextResponse.json(transaction);
   } catch (error) {
-    console.error("Update transaction error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    console.error('Update transaction error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -132,7 +118,7 @@ export async function DELETE(
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { id: holdingId, txId } = await params;
@@ -147,18 +133,12 @@ export async function DELETE(
     });
 
     if (!transaction) {
-      return NextResponse.json(
-        { error: "Transaction not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Transaction not found' }, { status: 404 });
     }
 
-    return NextResponse.json({ message: "Transaction deleted successfully" });
+    return NextResponse.json({ message: 'Transaction deleted successfully' });
   } catch (error) {
-    console.error("Delete transaction error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    console.error('Delete transaction error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

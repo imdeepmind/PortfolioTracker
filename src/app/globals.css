@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --foreground: #ededed;
@@ -19,5 +19,9 @@ body {
   color: var(--foreground);
   background: linear-gradient(135deg, var(--background-start), var(--background-end));
   min-height: 100vh;
-  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  font-family:
+    var(--font-inter),
+    system-ui,
+    -apple-system,
+    sans-serif;
 }

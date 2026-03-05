@@ -1,19 +1,15 @@
-"use client";
+'use client';
 
-import { useSession } from "next-auth/react";
-import React, { useState } from "react";
-import Sidebar from "./Sidebar";
-import { PageSpinner } from "@/components/bits/Spinner";
+import { useSession } from 'next-auth/react';
+import React, { useState } from 'react';
+import Sidebar from './Sidebar';
+import { PageSpinner } from '@/components/bits/Spinner';
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { status } = useSession();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  if (status === "loading") {
+  if (status === 'loading') {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <PageSpinner text="Loading..." />
@@ -41,13 +37,28 @@ export default function DashboardLayout({
               aria-label="Open menu"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               </svg>
             </button>
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center">
-                <svg className="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                <svg
+                  className="w-4 h-4 text-indigo-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                  />
                 </svg>
               </div>
               <span className="text-sm font-semibold text-white">Portfolio Tracker</span>
@@ -57,9 +68,7 @@ export default function DashboardLayout({
         </div>
 
         {/* Page content — full width */}
-        <main className="relative z-10 px-6 py-8 lg:px-10 lg:py-10">
-          {children}
-        </main>
+        <main className="relative z-10 px-6 py-8 lg:px-10 lg:py-10">{children}</main>
       </div>
     </div>
   );

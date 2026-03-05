@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
-import DashboardLayout from "@/components/items/DashboardLayout";
-import GlassCard from "@/components/bits/GlassCard";
-import Input from "@/components/bits/Input";
-import Textarea from "@/components/bits/Textarea";
-import Select, { RISK_OPTIONS } from "@/components/bits/Select";
-import Button from "@/components/bits/Button";
-import BackLink from "@/components/bits/BackLink";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+import DashboardLayout from '@/components/items/DashboardLayout';
+import GlassCard from '@/components/bits/GlassCard';
+import Input from '@/components/bits/Input';
+import Textarea from '@/components/bits/Textarea';
+import Select, { RISK_OPTIONS } from '@/components/bits/Select';
+import Button from '@/components/bits/Button';
+import BackLink from '@/components/bits/BackLink';
 
 export default function NewHoldingPage() {
   const router = useRouter();
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [risk, setRisk] = useState("high");
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [risk, setRisk] = useState('high');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -23,23 +23,23 @@ export default function NewHoldingPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/holdings", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/holdings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, description, risk }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        toast.error(data.error || "Failed to create holding");
+        toast.error(data.error || 'Failed to create holding');
         return;
       }
 
-      toast.success("Holding created successfully");
-      router.push("/holdings");
+      toast.success('Holding created successfully');
+      router.push('/holdings');
     } catch {
-      toast.error("An unexpected error occurred");
+      toast.error('An unexpected error occurred');
     } finally {
       setLoading(false);
     }

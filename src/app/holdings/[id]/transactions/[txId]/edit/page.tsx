@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useEffect, useState, use } from "react";
-import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
-import DashboardLayout from "@/components/items/DashboardLayout";
-import GlassCard from "@/components/bits/GlassCard";
-import Input from "@/components/bits/Input";
-import Button from "@/components/bits/Button";
-import BackLink from "@/components/bits/BackLink";
-import { PageSpinner } from "@/components/bits/Spinner";
+import { useEffect, useState, use } from 'react';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+import DashboardLayout from '@/components/items/DashboardLayout';
+import GlassCard from '@/components/bits/GlassCard';
+import Input from '@/components/bits/Input';
+import Button from '@/components/bits/Button';
+import BackLink from '@/components/bits/BackLink';
+import { PageSpinner } from '@/components/bits/Spinner';
 
 export default function EditTransactionPage({
   params,
@@ -17,25 +17,23 @@ export default function EditTransactionPage({
 }) {
   const { id: holdingId, txId } = use(params);
   const router = useRouter();
-  const [amount, setAmount] = useState("");
-  const [totalPortfolioSize, setTotalPortfolioSize] = useState("");
-  const [dateTime, setDateTime] = useState("");
+  const [amount, setAmount] = useState('');
+  const [totalPortfolioSize, setTotalPortfolioSize] = useState('');
+  const [dateTime, setDateTime] = useState('');
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
 
   useEffect(() => {
     const fetchTransaction = async () => {
       try {
-        const res = await fetch(
-          `/api/holdings/${holdingId}/transactions/${txId}`
-        );
-        if (!res.ok) throw new Error("Failed to fetch");
+        const res = await fetch(`/api/holdings/${holdingId}/transactions/${txId}`);
+        if (!res.ok) throw new Error('Failed to fetch');
         const data = await res.json();
         setAmount(data.amount.toString());
         setTotalPortfolioSize(data.totalPortfolioSize.toString());
         setDateTime(new Date(data.dateTime).toISOString().slice(0, 16));
       } catch {
-        toast.error("Failed to load transaction");
+        toast.error('Failed to load transaction');
         router.push(`/holdings/${holdingId}/transactions`);
       } finally {
         setFetching(false);
@@ -49,30 +47,27 @@ export default function EditTransactionPage({
     setLoading(true);
 
     try {
-      const res = await fetch(
-        `/api/holdings/${holdingId}/transactions/${txId}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            amount: parseFloat(amount),
-            totalPortfolioSize: parseFloat(totalPortfolioSize),
-            dateTime,
-          }),
-        }
-      );
+      const res = await fetch(`/api/holdings/${holdingId}/transactions/${txId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: parseFloat(amount),
+          totalPortfolioSize: parseFloat(totalPortfolioSize),
+          dateTime,
+        }),
+      });
 
       const data = await res.json();
 
       if (!res.ok) {
-        toast.error(data.error || "Failed to update transaction");
+        toast.error(data.error || 'Failed to update transaction');
         return;
       }
 
-      toast.success("Transaction updated successfully");
+      toast.success('Transaction updated successfully');
       router.push(`/holdings/${holdingId}/transactions`);
     } catch {
-      toast.error("An unexpected error occurred");
+      toast.error('An unexpected error occurred');
     } finally {
       setLoading(false);
     }

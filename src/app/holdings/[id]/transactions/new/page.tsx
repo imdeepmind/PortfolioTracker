@@ -1,26 +1,20 @@
-"use client";
+'use client';
 
-import { useState, use } from "react";
-import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
-import DashboardLayout from "@/components/items/DashboardLayout";
-import GlassCard from "@/components/bits/GlassCard";
-import Input from "@/components/bits/Input";
-import Button from "@/components/bits/Button";
-import BackLink from "@/components/bits/BackLink";
+import { useState, use } from 'react';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+import DashboardLayout from '@/components/items/DashboardLayout';
+import GlassCard from '@/components/bits/GlassCard';
+import Input from '@/components/bits/Input';
+import Button from '@/components/bits/Button';
+import BackLink from '@/components/bits/BackLink';
 
-export default function NewTransactionPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default function NewTransactionPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: holdingId } = use(params);
   const router = useRouter();
-  const [amount, setAmount] = useState("");
-  const [totalPortfolioSize, setTotalPortfolioSize] = useState("");
-  const [dateTime, setDateTime] = useState(
-    new Date().toISOString().slice(0, 16)
-  );
+  const [amount, setAmount] = useState('');
+  const [totalPortfolioSize, setTotalPortfolioSize] = useState('');
+  const [dateTime, setDateTime] = useState(new Date().toISOString().slice(0, 16));
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -29,8 +23,8 @@ export default function NewTransactionPage({
 
     try {
       const res = await fetch(`/api/holdings/${holdingId}/transactions`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           amount: parseFloat(amount),
           totalPortfolioSize: parseFloat(totalPortfolioSize),
@@ -41,14 +35,14 @@ export default function NewTransactionPage({
       const data = await res.json();
 
       if (!res.ok) {
-        toast.error(data.error || "Failed to create transaction");
+        toast.error(data.error || 'Failed to create transaction');
         return;
       }
 
-      toast.success("Transaction recorded successfully");
+      toast.success('Transaction recorded successfully');
       router.push(`/holdings/${holdingId}/transactions`);
     } catch {
-      toast.error("An unexpected error occurred");
+      toast.error('An unexpected error occurred');
     } finally {
       setLoading(false);
     }
