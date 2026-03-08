@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 
@@ -63,20 +64,14 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
     <div className="flex flex-col h-full">
       {/* Logo */}
       <div className="px-5 py-6 flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center shrink-0">
-          <svg
-            className="w-5 h-5 text-indigo-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-            />
-          </svg>
+        <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0">
+          <Image
+            src="/logo.png"
+            alt="Portfolio Tracker Logo"
+            width={36}
+            height={36}
+            className="w-full h-full object-contain"
+          />
         </div>
         <span className="text-base font-semibold text-white tracking-tight">Portfolio Tracker</span>
       </div>
@@ -93,7 +88,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
                 onClick={onClose}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                   isActive
-                    ? 'bg-indigo-500/15 text-indigo-300 border border-indigo-500/20'
+                    ? 'bg-primary-500/15 text-primary-300 border border-primary-500/20'
                     : 'text-gray-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
                 }`}
               >
