@@ -2,6 +2,9 @@
   "name": "portfolio-tracker",
   "version": "0.1.0",
   "private": true,
+  "author": "Abhishek Chatterjee",
+  "repository": "https://github.com/imdeepmind/portfolio-tracker.git",
+  "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
