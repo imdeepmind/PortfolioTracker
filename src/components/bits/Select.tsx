@@ -19,7 +19,7 @@ export default function Select({ label, helperText, required, id, options, ...re
       <select
         id={id}
         required={required}
-        className="w-full px-4 py-3 rounded-xl bg-white/[0.06] border border-white/[0.1] text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-200 appearance-none cursor-pointer"
+        className="w-full px-4 py-3 rounded-xl bg-white/[0.06] border border-white/[0.1] text-white focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all duration-200 appearance-none cursor-pointer"
         {...rest}
       >
         {options.map((opt) => (

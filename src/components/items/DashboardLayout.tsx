@@ -2,6 +2,7 @@
 
 import { useSession } from 'next-auth/react';
 import React, { useState } from 'react';
+import Image from 'next/image';
 import Sidebar from './Sidebar';
 import { PageSpinner } from '@/components/bits/Spinner';
 
@@ -20,7 +21,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="min-h-screen">
       {/* Decorative orbs */}
-      <div className="fixed top-0 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="fixed top-0 left-1/4 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="fixed bottom-0 right-1/4 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Sidebar */}
@@ -46,20 +47,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </svg>
             </button>
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center">
-                <svg
-                  className="w-4 h-4 text-indigo-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                  />
-                </svg>
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center overflow-hidden">
+                <Image
+                  src="/logo.png"
+                  alt="Portfolio Tracker Logo"
+                  width={28}
+                  height={28}
+                  className="w-full h-full object-contain"
+                />
               </div>
               <span className="text-sm font-semibold text-white">Portfolio Tracker</span>
             </div>

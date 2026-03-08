@@ -10,8 +10,47 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Portfolio Tracker',
-  description: 'Track and manage your investment portfolio',
+  title: {
+    default: 'Portfolio Tracker | Manage Your Investments',
+    template: '%s | Portfolio Tracker',
+  },
+  description:
+    'A powerful and intuitive portfolio tracker to manage your stocks, crypto, and other investments in one place. Monitor your P&L, risk distribution, and more.',
+  keywords: [
+    'portfolio tracker',
+    'investment management',
+    'stock tracker',
+    'crypto portfolio',
+    'P&L tracking',
+  ],
+  authors: [{ name: 'Abhishek Chatterjee' }],
+  creator: 'Abhishek Chatterjee',
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://portfolio-tracker.example.com',
+    siteName: 'Portfolio Tracker',
+    title: 'Portfolio Tracker | Manage Your Investments',
+    description: 'Track and manage your investment portfolio with ease.',
+    images: [
+      {
+        url: '/logo.png',
+        width: 800,
+        height: 600,
+        alt: 'Portfolio Tracker Logo',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Portfolio Tracker | Manage Your Investments',
+    description: 'Track and manage your investment portfolio with ease.',
+    images: ['/logo.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

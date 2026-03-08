@@ -24,7 +24,7 @@ export default function StatCard({
   return (
     <div className="backdrop-blur-xl bg-white/[0.04] border border-white/[0.08] rounded-2xl p-5 hover:bg-white/[0.06] transition-all duration-200 group">
       <div className="flex items-start justify-between mb-4">
-        <div className="p-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 group-hover:bg-indigo-500/15 transition-colors">
+        <div className="p-2.5 rounded-xl bg-primary-500/10 border border-primary-500/20 text-primary-400 group-hover:bg-primary-500/15 transition-colors">
           {icon}
         </div>
       </div>
