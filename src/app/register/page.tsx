@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+import Image from 'next/image';
 import GlassCard from '@/components/bits/GlassCard';
 import Input from '@/components/bits/Input';
 import Button from '@/components/bits/Button';
@@ -62,20 +63,14 @@ export default function RegisterPage() {
 
       <div className="w-full max-w-md relative">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-purple-500/20 border border-purple-500/30 mb-4">
-            <svg
-              className="w-8 h-8 text-purple-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
-              />
-            </svg>
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl flex items-center justify-center overflow-hidden mb-4">
+            <Image
+              src="/logo.png"
+              alt="Portfolio Tracker Logo"
+              width={80}
+              height={80}
+              className="w-full h-full object-contain"
+            />
           </div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
             Create account

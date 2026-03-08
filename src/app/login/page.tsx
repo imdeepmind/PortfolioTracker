@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import GlassCard from '@/components/bits/GlassCard';
 import Input from '@/components/bits/Input';
 import Button from '@/components/bits/Button';
@@ -48,20 +49,14 @@ export default function LoginPage() {
 
       <div className="w-full max-w-md relative">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-500/20 border border-indigo-500/30 mb-4">
-            <svg
-              className="w-8 h-8 text-indigo-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-              />
-            </svg>
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl flex items-center justify-center overflow-hidden mb-4">
+            <Image
+              src="/logo.png"
+              alt="Portfolio Tracker Logo"
+              width={80}
+              height={80}
+              className="w-full h-full object-contain"
+            />
           </div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
             Welcome back
