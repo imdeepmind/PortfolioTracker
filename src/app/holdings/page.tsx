@@ -135,7 +135,7 @@ export default function HoldingsListPage() {
         action={
           <div className="flex gap-3 flex-wrap">
             <Button href="/holdings/bulk-insert" variant="secondary" icon={TableIcon}>
-              Multiple Transaction
+              Add Multiple Transaction
             </Button>
             <Button href="/holdings/new" icon={PlusIcon}>
               New Holding
