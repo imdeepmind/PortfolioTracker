@@ -44,7 +44,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="fixed top-20 left-20 w-72 h-72 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="fixed top-20 left-20 w-72 h-72 bg-primary-500/20 rounded-full blur-3xl pointer-events-none" />
       <div className="fixed bottom-20 right-20 w-96 h-96 bg-purple-500/15 rounded-full blur-3xl pointer-events-none" />
 
       <div className="w-full max-w-md relative">

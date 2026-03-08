@@ -58,8 +58,8 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="fixed top-32 right-20 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
-      <div className="fixed bottom-10 left-10 w-72 h-72 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="fixed top-32 right-20 w-80 h-80 bg-primary-500/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="fixed bottom-10 left-10 w-72 h-72 bg-primary-500/15 rounded-full blur-3xl pointer-events-none" />
 
       <div className="w-full max-w-md relative">
         <div className="text-center mb-8">

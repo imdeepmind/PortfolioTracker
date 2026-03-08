@@ -55,7 +55,7 @@ export default function HoldingCard({
         <div className="flex items-center gap-1">
           <Link
             href={`/holdings/${id}/transactions`}
-            className="p-1.5 rounded-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-500/10 transition-all duration-200"
+            className="p-1.5 rounded-md text-gray-500 hover:text-primary-400 hover:bg-primary-500/10 transition-all duration-200"
             title="Transactions"
           >
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -101,7 +101,7 @@ export default function HoldingCard({
       {/* Name and description */}
       <div className="mb-3">
         <Link href={`/holdings/${id}/transactions`}>
-          <h3 className="text-white font-semibold text-lg truncate hover:text-indigo-300 transition-colors cursor-pointer">
+          <h3 className="text-white font-semibold text-lg truncate hover:text-primary-300 transition-colors cursor-pointer">
             {name}
           </h3>
         </Link>
