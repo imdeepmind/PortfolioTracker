@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import AuthProvider from '@/components/items/AuthProvider';
 import { Toaster } from 'react-hot-toast';
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -81,6 +83,8 @@ export default function RootLayout({
             },
           }}
         />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
